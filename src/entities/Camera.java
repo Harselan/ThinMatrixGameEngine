@@ -23,7 +23,7 @@ public class Camera
 			position.z -= speed;
 		}
 		
-		if( Keyboard.isKeyDown( Keyboard.KEY_W ) )
+		if( Keyboard.isKeyDown( Keyboard.KEY_S ) )
 		{
 			position.z += speed;
 		}
