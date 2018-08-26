@@ -12,6 +12,8 @@
 #### Vertex Shader
 ##### Vertex Shader är shadern som ska hantera punkerna för alla vertexer i shader. Denna returnerar ett värde som Fragment Shadern ska hantera till en färg. Denna shader loopar igenom varje vertex.
 
-
 #### Fragment Shader
 ##### Fragment Shader är shadern som lägger till färger till renderaren. Denna är kopplad till Vertex Shader och returnerar en färg för varje enskild pixel. Denna shader loopar igenom varje pixel. 
+
+### Texture
+##### Texture är som en målad duk som man lägger på ett objekt som renderas till verkligheten. Man lägger i princip på en bild på ett objekt så att man själv kan välja hur den ska se ut utan att behöva skriva in färgen.
