@@ -20,3 +20,6 @@
 
 ### Uniformer
 #### Dessa är variabler som kan skickas in till vertex shadern eller fragment shadern för att påverka renderingen så att man inte behöver ändra modellens vao så fort man vill lägga till lite ljus eller rotera den.
+
+### Transformation
+#### Transformation är en samling av vad som bestämmer positionen av en model i spelet. Den består av Translation( x, y, z ), Rotering( rx, ry, rz ) samt skalan vilket 1 är normal storlek.
