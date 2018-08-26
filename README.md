@@ -23,3 +23,6 @@
 
 ### Transformation
 #### Transformation är en samling av vad som bestämmer positionen av en model i spelet. Den består av Translation( x, y, z ), Rotering( rx, ry, rz ) samt skalan vilket 1 är normal storlek.
+
+### Projektions matrixer
+#### Dessa matrixer är till för att visa vad spelaren ser från sin kamera, vilket då gör att saker kan verka mindre om de är längre bort. Projektionsmatrixen består av aspect ratio, field of view, near plane distance och far plane distance.
