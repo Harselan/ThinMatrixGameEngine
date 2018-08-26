@@ -17,3 +17,6 @@
 
 ### Texture
 ##### Texture är som en målad duk som man lägger på ett objekt som renderas till verkligheten. Man lägger i princip på en bild på ett objekt så att man själv kan välja hur den ska se ut utan att behöva skriva in färgen.
+
+### Uniformer
+#### Dessa är variabler som kan skickas in till vertex shadern eller fragment shadern för att påverka renderingen så att man inte behöver ändra modellens vao så fort man vill lägga till lite ljus eller rotera den.
