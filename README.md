@@ -26,3 +26,6 @@
 
 ### Projektions matrixer
 #### Dessa matrixer är till för att visa vad spelaren ser från sin kamera, vilket då gör att saker kan verka mindre om de är längre bort. Projektionsmatrixen består av aspect ratio, field of view, near plane distance och far plane distance.
+
+### Normaler
+#### Normaler är vilken riktning den specifika delen av en modell är riktad mot, vilket då blir rakt ifrån den delen vilket är 90 grader.
