@@ -9,7 +9,7 @@ public class Camera
 	private float pitch;
 	private float yaw;
 	private float roll;
-	private float speed = 0.02f;
+	private float speed = 0.05f;
 	
 	public Camera(  )
 	{
