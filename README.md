@@ -35,3 +35,6 @@
 
 ### Specular lightning
 #### Specular lightning är ljus som reflekteras istället för att det fastnar som på diffuse lightning.
+
+### Ambient lightning
+#### Ambient lightning är ljus på den delen av objektet som inte är utsatt för något ljus, så att det inte blir kolsvart på dessa delar.
