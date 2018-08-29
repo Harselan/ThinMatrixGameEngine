@@ -29,3 +29,12 @@
 
 ### Normaler
 #### Normaler är vilken riktning den specifika delen av en modell är riktad mot, vilket då blir rakt ifrån den delen vilket är 90 grader.
+
+### Diffuse Lightning
+#### Diffuse Lightning är ljus som "fastnar" på objektet och får en att se det.
+
+### Specular lightning
+#### Specular lightning är ljus som reflekteras istället för att det fastnar som på diffuse lightning.
+
+### Ambient lightning
+#### Ambient lightning är ljus på den delen av objektet som inte är utsatt för något ljus, så att det inte blir kolsvart på dessa delar.
