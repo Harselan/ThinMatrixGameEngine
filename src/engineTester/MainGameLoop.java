@@ -57,16 +57,21 @@ public class MainGameLoop {
 	        
 	        List<Entity> entities = new ArrayList<Entity>();
 	        Random random = new Random();
+	        
+	        Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
+	        
 	        for(int i=0;i<500;i++){
-	            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,3));
-	            entities.add(new Entity(grass, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,1));
-	            entities.add(new Entity(fern, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,0.6f));
+	        	
+	        	float x = random.nextFloat() * 800 - 400;
+	        	float z = random.nextFloat() * -600;
+	        	float y = terrain.getHeightOfTerrain( x, z );
+	        	
+	            entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
+	            entities.add(new Entity(grass,  new Vector3f( x, y, z ),0,0,0,1));
+	            entities.add(new Entity(fern,  new Vector3f( x, y, z ),0,0,0,0.6f));
 	        }
 	         
 	        Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
-	         
-	        Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
-	        Terrain terrain2 = new Terrain( -1,-1,loader, texturePack, blendMap, "heightmap" );
 	         
 	        MasterRenderer renderer = new MasterRenderer();
 	        
@@ -78,12 +83,11 @@ public class MainGameLoop {
 	        Camera camera = new Camera( player );
 	         
 	        while(!Display.isCloseRequested()){
-	            camera.move();
-	            player.move();
+	        	player.move( terrain );
+	        	camera.move();
 	            renderer.processEntity(player);
 	            
 	            renderer.processTerrain(terrain);
-	            renderer.processTerrain(terrain2);
 	            for(Entity entity:entities){
 	                renderer.processEntity(entity);
 	            }
