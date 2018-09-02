@@ -47,3 +47,6 @@
 
 ### HeightMap
 #### Detta är en bild som visar terrängen och bestämmer dess höjd i t.ex. en gråskala. Till skillnad från BlendMap som visar hur terrängen ska se ut i färg.
+
+### Texture Atlas
+#### Texture Atlases är en tabell av flera olika texturer med x antal rader och kolumner. Detta kan bland annat användas för att effektivisera texturladdningen.
