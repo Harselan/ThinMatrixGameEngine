@@ -18,25 +18,7 @@ public class Camera
 	
 	public void move()
 	{
-		if( Keyboard.isKeyDown( Keyboard.KEY_W ) )
-		{
-			position.z -= speed;
-		}
 		
-		if( Keyboard.isKeyDown( Keyboard.KEY_S ) )
-		{
-			position.z += speed;
-		}
-		
-		if( Keyboard.isKeyDown( Keyboard.KEY_D ) )
-		{
-			position.x += speed;
-		}
-		
-		if( Keyboard.isKeyDown( Keyboard.KEY_A ) )
-		{
-			position.x -= speed;
-		}
 	}
 
 	public Vector3f getPosition() 
