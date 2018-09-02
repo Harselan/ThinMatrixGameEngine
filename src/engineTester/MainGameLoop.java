@@ -52,11 +52,16 @@ public class MainGameLoop {
 	        TexturedModel grass = new TexturedModel( OBJLoader.loadObjModel( "grassModel", loader ), new ModelTexture( loader.loadTexture( "grassTexture" ) ) );
 	        grass.getTexture().setHasTrasparency( true );
 	        grass.getTexture().setUseFakeLightning( true );
-	        TexturedModel fern = new TexturedModel( OBJLoader.loadObjModel( "fern", loader ), new ModelTexture( loader.loadTexture( "fern" ) ) );
+	        
+	        ModelTexture fernTextureAtlas = new ModelTexture( loader.loadTexture( "fern" ) );
+	        fernTextureAtlas.setNumberOfRows( 2 );
+	        
+	        
+	        TexturedModel fern = new TexturedModel( OBJLoader.loadObjModel( "fern", loader ), fernTextureAtlas );
 	        fern.getTexture().setHasTrasparency( true );
 	        
 	        List<Entity> entities = new ArrayList<Entity>();
-	        Random random = new Random();
+	        Random random = new Random(676452);
 	        
 	        Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
 	        
@@ -67,8 +72,18 @@ public class MainGameLoop {
 	        	float y = terrain.getHeightOfTerrain( x, z );
 	        	
 	            entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
-	            entities.add(new Entity(grass,  new Vector3f( x, y, z ),0,0,0,1));
-	            entities.add(new Entity(fern,  new Vector3f( x, y, z ),0,0,0,0.6f));
+	            
+	            x = random.nextFloat() * 800 - 400;
+	        	z = random.nextFloat() * -600;
+	        	y = terrain.getHeightOfTerrain( x, z );
+	            
+	            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
+	            
+	            x = random.nextFloat() * 800 - 400;
+	        	z = random.nextFloat() * -600;
+	        	y = terrain.getHeightOfTerrain( x, z );
+	        	
+	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
 	        }
 	         
 	        Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
