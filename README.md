@@ -44,3 +44,6 @@
 
 ### MipMapping
 #### Detta är att man renderar objekt i en mindre upplösning ju längre bort de är för att spara på resurser. Detta kommer inte märkas så lätt av spelaren och är därför väldigt bra.
+
+### HeightMap
+#### Detta är en bild som visar terrängen och bestämmer dess höjd i t.ex. en gråskala. Till skillnad från BlendMap som visar hur terrängen ska se ut i färg.
