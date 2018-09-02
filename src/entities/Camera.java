@@ -94,6 +94,10 @@ public class Camera
 			if( pitch < 1 )
 			{
 				pitch = 1;
+			} 
+			else if( pitch > 60 )
+			{
+				pitch = 60;
 			}
 		}
 	}
