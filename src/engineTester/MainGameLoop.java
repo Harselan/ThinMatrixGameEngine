@@ -12,6 +12,8 @@ import entities.Entity;
 import entities.Light;
 import models.RawModel;
 import models.TexturedModel;
+import objConverter.ModelData;
+import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -25,11 +27,13 @@ public class MainGameLoop {
 		 
 	        DisplayManager.createDisplay();
 	        Loader loader = new Loader();
+	        
+	        ModelData data = OBJFileLoader.loadOBJ("tree");
 	         
 	         
-	        RawModel model = OBJLoader.loadObjModel("tree", loader);
+	        RawModel treeModel = loader.loadToVAO( data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices() );
 	         
-	        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("tree")));
+	        TexturedModel staticModel = new TexturedModel( treeModel,new ModelTexture(loader.loadTexture("tree")));
 	        TexturedModel grass = new TexturedModel( OBJLoader.loadObjModel( "grassModel", loader ), new ModelTexture( loader.loadTexture( "grassTexture" ) ) );
 	        grass.getTexture().setHasTrasparency( true );
 	        grass.getTexture().setUseFakeLightning( true );
