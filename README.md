@@ -41,3 +41,6 @@
 
 ### BlendMap
 #### En BlendMap är som en karta som programmet använder för att rita ut terrängen. Så att man kan lägga till t.ex. en väg eller någonting liknande.
+
+### MipMapping
+#### Detta är att man renderar objekt i en mindre upplösning ju längre bort de är för att spara på resurser. Detta kommer inte märkas så lätt av spelaren och är därför väldigt bra.
