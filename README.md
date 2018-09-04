@@ -50,3 +50,6 @@
 
 ### Texture Atlas
 #### Texture Atlases är en tabell av flera olika texturer med x antal rader och kolumner. Detta kan bland annat användas för att effektivisera texturladdningen.
+
+### Attenuation
+#### Detta är det som gör att ljusets styrka varierar med avståndet.
