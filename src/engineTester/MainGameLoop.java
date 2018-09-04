@@ -36,74 +36,87 @@ public class MainGameLoop {
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
 	        
-	        TerrainTexture backgroundTexture = new TerrainTexture( loader.loadTexture( "grass" ) );
-	        TerrainTexture rTexture = new TerrainTexture( loader.loadTexture( "dirt" ) );
-	        TerrainTexture gTexture = new TerrainTexture( loader.loadTexture( "pinkFlowers" ) );
-	        TerrainTexture bTexture = new TerrainTexture( loader.loadTexture( "path" ) );
+	        TerrainTexture backgroundTexture 	= new TerrainTexture( loader.loadTexture( "grass" ) );
+	        TerrainTexture rTexture 			= new TerrainTexture( loader.loadTexture( "dirt" ) );
+	        TerrainTexture gTexture 			= new TerrainTexture( loader.loadTexture( "pinkFlowers" ) );
+	        TerrainTexture bTexture 			= new TerrainTexture( loader.loadTexture( "path" ) );
+	        TerrainTexture blendMap 			= new TerrainTexture( loader.loadTexture( "blendMap" ) );
 	        
-	        TerrainTexturePack texturePack = new TerrainTexturePack( backgroundTexture, rTexture, gTexture, bTexture );
-	        TerrainTexture blendMap = new TerrainTexture( loader.loadTexture( "blendMap" ) );
+	        TerrainTexturePack texturePack 		= new TerrainTexturePack( backgroundTexture, rTexture, gTexture, bTexture );
 	        
 	        //********************************************
 	        
-	        ModelData data = OBJFileLoader.loadOBJ("tree");
-	         
-	         
-	        RawModel treeModel = loader.loadToVAO( data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices() );
-	         
-	        TexturedModel staticModel = new TexturedModel( treeModel,new ModelTexture(loader.loadTexture("tree")));
-	        TexturedModel grass = new TexturedModel( OBJLoader.loadObjModel( "grassModel", loader ), new ModelTexture( loader.loadTexture( "grassTexture" ) ) );
-	        grass.getTexture().setHasTrasparency( true );
-	        grass.getTexture().setUseFakeLightning( true );
+	        //*********** RAW MODELS **********
+	        
+	        ModelData data 			= OBJFileLoader.loadOBJ("tree");   
+	        RawModel treeModel 		= loader.loadToVAO( data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices() );
+	        RawModel playerModel 	= OBJLoader.loadObjModel( "person", loader );
+	        
+	        //********************************************
+	        
+	        //*********** MODEL TEXTURES **********
 	        
 	        ModelTexture fernTextureAtlas = new ModelTexture( loader.loadTexture( "fern" ) );
+	        
+	        //********************************************
+	        
 	        fernTextureAtlas.setNumberOfRows( 2 );
 	        
+	        //*********** TEXTURED MODELS **********
 	        
-	        TexturedModel fern = new TexturedModel( OBJLoader.loadObjModel( "fern", loader ), fernTextureAtlas );
+	        TexturedModel staticModel 	= new TexturedModel( treeModel,new ModelTexture(loader.loadTexture("tree")));
+	        TexturedModel grass 		= new TexturedModel( OBJLoader.loadObjModel( "grassModel", loader ), new ModelTexture( loader.loadTexture( "grassTexture" ) ) );
+	        TexturedModel fern 			= new TexturedModel( OBJLoader.loadObjModel( "fern", loader ), fernTextureAtlas );
+	        TexturedModel lampModel 	= new TexturedModel( OBJLoader.loadObjModel( "lamp", loader ), new ModelTexture( loader.loadTexture("lamp") ) );
+	        TexturedModel playerTexture = new TexturedModel( playerModel, new ModelTexture( loader.loadTexture( "playerTexture" ) ) );
+	        
+	        //********************************************
+	        
+	        grass.getTexture().setHasTrasparency( true );
+	        grass.getTexture().setUseFakeLightning( true );
 	        fern.getTexture().setHasTrasparency( true );
 	        
-	        List<Entity> entities = new ArrayList<Entity>();
-	        Random random = new Random(676452);
+	        List<Entity> entities 	= new ArrayList<Entity>();
+	        List<Light> lights 		= new ArrayList<Light>();
 	        
+	        Random random 	= new Random(676452);
 	        Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
 	        
-	        for(int i=0;i<500;i++){
-	        	
-	        	float x = random.nextFloat() * 800 - 400;
+	        int length = 800;
+	        
+	        for( int i = 0; i < length; i++ )
+	        {
+	        	float x = random.nextFloat() * length - 400;
 	        	float z = random.nextFloat() * -600;
 	        	float y = terrain.getHeightOfTerrain( x, z );
 	        	
 	            entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
 	            
-	            x = random.nextFloat() * 800 - 400;
+	            x = random.nextFloat() * length - 400;
 	        	z = random.nextFloat() * -600;
 	        	y = terrain.getHeightOfTerrain( x, z );
 	            
 	            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
 	            
-	            x = random.nextFloat() * 800 - 400;
+	            x = random.nextFloat() * length - 400;
 	        	z = random.nextFloat() * -600;
 	        	y = terrain.getHeightOfTerrain( x, z );
 	        	
 	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
+	            
+	            if( i < 4 )
+	            {
+	            	x = random.nextFloat() * length - 400;
+		        	z = random.nextFloat() * -600;
+		        	y = terrain.getHeightOfTerrain( x, z );
+		        	
+		        	lights.add( new Light( new Vector3f( x, y + 13.8f, z ), new Vector3f( random.nextInt( 4 ), random.nextInt( 4 ), random.nextInt( 4 ) ), new Vector3f( 1, 0.01f, 0.002f ) ) );
+		        	entities.add( new Entity( lampModel, new Vector3f( x, y, z ), 0, 0, 0, 1 ) );
+	            }
+
 	        }
-	         
-	        Light light = new Light(new Vector3f(0,10000,-7000),new Vector3f(1,1,1));
-	        Light light2 = new Light(new Vector3f(-200,10,-200),new Vector3f(10,0,0));
-	        Light light3 = new Light(new Vector3f(200,10,200),new Vector3f(0,0,10));
-	        
-	        List<Light> lights = new ArrayList<Light>();
-	         
-	        lights.add( light );
-	        lights.add( light2 );
-	        lights.add( light3 );
 	        
 	        MasterRenderer renderer = new MasterRenderer();
-	        
-	        RawModel playerModel = OBJLoader.loadObjModel( "person", loader );
-	        TexturedModel playerTexture = new TexturedModel( playerModel, new ModelTexture( loader.loadTexture( "playerTexture" ) ) );
-	        
 	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
 	        
 	        Camera camera = new Camera( player );
