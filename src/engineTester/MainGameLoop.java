@@ -116,7 +116,7 @@ public class MainGameLoop {
 
 	        }
 	        
-	        MasterRenderer renderer = new MasterRenderer();
+	        MasterRenderer renderer = new MasterRenderer( loader );
 	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
 	        
 	        Camera camera = new Camera( player );
