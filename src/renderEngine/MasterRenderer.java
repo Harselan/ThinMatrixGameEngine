@@ -20,13 +20,13 @@ import terrains.Terrain;
 
 public class MasterRenderer 
 {
-	 private static final float FOV = 70;
+	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1000;
 	
-	private static final float RED   = 0.5444f;
-	private static final float GREEN = 0.62f;
-	private static final float BLUE  = 0.69f;
+	public static final float RED   = 0.5444f;
+	public static final float GREEN = 0.62f;
+	public static final float BLUE  = 0.69f;
 	 
 	private Matrix4f projectionMatrix;
 	 
@@ -75,7 +75,7 @@ public class MasterRenderer
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
-        skyboxRenderer.render( camera );
+        skyboxRenderer.render( camera, RED, GREEN, BLUE );
         terrains.clear();
         entities.clear();
     }
