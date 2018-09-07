@@ -106,6 +106,11 @@ public class MasterRenderer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(RED, GREEN, BLUE, 1);
     }
+    
+    public Matrix4f getProjectionMatrix()
+    {
+    	return projectionMatrix;
+    }
      
     private void createProjectionMatrix() {
         float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();

@@ -26,6 +26,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolBox.MousePicker;
 
 public class MainGameLoop {
 
@@ -104,7 +105,7 @@ public class MainGameLoop {
 	        	
 	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
 	            
-	            if( i < 4 )
+	            if( i < 3 )
 	            {
 	            	x = random.nextFloat() * length - 400;
 		        	z = random.nextFloat() * -600;
@@ -124,14 +125,30 @@ public class MainGameLoop {
 	        List<GuiTexture> guis = new ArrayList<GuiTexture>();
 	        GuiTexture gui = new GuiTexture( loader.loadTexture( "socuwan" ), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
 	        GuiTexture gui2 = new GuiTexture( loader.loadTexture( "thinmatrix" ), new Vector2f( 0.3f, 0.6f ), new Vector2f( 0.25f, 0.25f ) );
-	        guis.add( gui );
-	        guis.add( gui2 );
+	        //guis.add( gui );
+	        //guis.add( gui2 );
 	        
 	        GuiRenderer guiRenderer = new GuiRenderer( loader );
+	        
+	        MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), terrain );
+	        
+	        Light light = new Light( new Vector3f( 293, 7, -305 ), new Vector3f( 0, 2, 2 ), new Vector3f( 1, 0.01f, 0.002f ) );
+	        lights.add( light );
+	        Entity lampEntity = ( new Entity( lampModel, new Vector3f( 293, -6.8f, -305 ), 0, 0, 0, 1 ) );
+	        entities.add( lampEntity );
 	        
 	        while(!Display.isCloseRequested()){
 	        	player.move( terrain );
 	        	camera.move();
+	        	
+	        	picker.update();
+	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
+	        	
+	        	if( terrainPoint != null )
+	        	{
+	        		lampEntity.setPosition( terrainPoint );
+	        		light.setPosition( new Vector3f( terrainPoint.x, terrainPoint.y + 15, terrainPoint.z ) );
+	        	}
 	        	
 	            renderer.processEntity(player);
 	            renderer.processTerrain(terrain);
