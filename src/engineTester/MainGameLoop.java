@@ -199,7 +199,7 @@ public class MainGameLoop {
 	        WaterShader waterShader = new WaterShader();
 	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix() );
 	        List<WaterTile> waters = new ArrayList<WaterTile>();
-	        WaterTile water = new WaterTile( 75, -75, 0 );
+	        WaterTile water = new WaterTile( 300, -300, 10 );
 	        waters.add( water );
 	        
 	        WaterFrameBuffers buffers = new WaterFrameBuffers();
