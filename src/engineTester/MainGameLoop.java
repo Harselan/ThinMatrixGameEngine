@@ -27,6 +27,7 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolBox.MousePicker;
+import water.WaterFrameBuffers;
 import water.WaterRenderer;
 import water.WaterShader;
 import water.WaterTile;
@@ -178,8 +179,8 @@ public class MainGameLoop {
 	        Camera camera = new Camera( player );
 	         
 	        List<GuiTexture> guis = new ArrayList<GuiTexture>();
-	        GuiTexture gui = new GuiTexture( loader.loadTexture( "socuwan" ), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
-	        GuiTexture gui2 = new GuiTexture( loader.loadTexture( "thinmatrix" ), new Vector2f( 0.3f, 0.6f ), new Vector2f( 0.25f, 0.25f ) );
+	        //GuiTexture gui = new GuiTexture( loader.loadTexture( "socuwan" ), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
+	        //GuiTexture gui2 = new GuiTexture( loader.loadTexture( "thinmatrix" ), new Vector2f( 0.3f, 0.6f ), new Vector2f( 0.25f, 0.25f ) );
 	        //guis.add( gui );
 	        //guis.add( gui2 );
 	        
@@ -197,10 +198,19 @@ public class MainGameLoop {
 	        List<WaterTile> waters = new ArrayList<WaterTile>();
 	        waters.add( new WaterTile( 75, -75, 0 ) );
 	        
+	        WaterFrameBuffers fbos = new WaterFrameBuffers();
+	        GuiTexture gui = new GuiTexture( fbos.getReflectionTexture(), new Vector2f( -0.5f, 0.5f ), new Vector2f( 0.5f, 0.5f ) );
+	        
+	        guis.add( gui );
+	        
 	        while(!Display.isCloseRequested()){
 	        	player.move( terrains );
 	        	camera.move();
 	        	picker.update();
+	        	
+	        	fbos.bindReflectionFrameBuffer();
+	        	renderer.renderScene( entities, terrains, lights, camera );
+	        	fbos.unbindCurrentFrameBuffer();
 	        	
 	        	renderer.renderScene( entities, terrains, lights, camera );
 	        	waterRenderer.render( waters, camera );
@@ -217,6 +227,8 @@ public class MainGameLoop {
 	            DisplayManager.updateDisplay();
 	        }
 	 
+	        fbos.cleanUp();
+	        waterShader.cleanUp();
 	        guiRenderer.cleanUp();
 	        renderer.cleanUp();
 	        loader.cleanUp();
