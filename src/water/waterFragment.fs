@@ -4,6 +4,7 @@ out vec4 out_Color;
 
 in vec4 clipSpace;
 in vec2 textureCoords;
+in vec3 toCameraVector;
 
 uniform sampler2D reflectionTexture;
 uniform sampler2D refractionTexture;
@@ -29,11 +30,16 @@ void main( void )
 	
 	reflectTexCoords += totalDistortion;
 	reflectTexCoords.x = clamp( reflectTexCoords.x, 0.001, 0.999 );
-	reflectTexCoords.y = clamp( reflectTexCoords.x, -0.999, -0.01 );
+	reflectTexCoords.y = clamp( reflectTexCoords.y, -0.999, -0.01 );
 	
 	vec4 reflectColour = texture( reflectionTexture, reflectTexCoords );
 	vec4 refractColour = texture( refractionTexture, refractTexCoords );
 	
-	out_Color = mix( reflectColour, refractColour, 0.5 );
+	vec3 viewVector = normalize( toCameraVector );
+	float refractiveFactor = dot( viewVector, vec3( 0.0, 1.0, 0.0 ) );
+	
+	refractiveFactor = pow( refractiveFactor, 5 );
+	
+	out_Color = mix( reflectColour, refractColour, refractiveFactor );
 	out_Color = mix( out_Color, vec4( 0.0, 0.3, 0.5, 1.0 ), 0.2 );
 }
