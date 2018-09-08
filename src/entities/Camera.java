@@ -35,6 +35,11 @@ public class Camera
 	{
 		return position;
 	}
+	
+	public void invertPitch()
+	{
+		this.pitch = -this.pitch;
+	}
 
 	public float getPitch() 
 	{
