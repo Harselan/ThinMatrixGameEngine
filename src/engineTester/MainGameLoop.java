@@ -196,18 +196,18 @@ public class MainGameLoop {
 	        Entity lampEntity = ( new Entity( lampModel, new Vector3f( 293, -6.8f, -305 ), 0, 0, 0, 1 ) );
 	        entities.add( lampEntity );
 	        
+	        WaterFrameBuffers buffers = new WaterFrameBuffers();
 	        WaterShader waterShader = new WaterShader();
-	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix() );
+	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix(), buffers );
 	        List<WaterTile> waters = new ArrayList<WaterTile>();
 	        WaterTile water = new WaterTile( 300, -300, 10 );
 	        waters.add( water );
 	        
-	        WaterFrameBuffers buffers = new WaterFrameBuffers();
-	        GuiTexture refraction = new GuiTexture( buffers.getRefractionTexture(), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
-	        GuiTexture reflection = new GuiTexture( buffers.getReflectionTexture(), new Vector2f( -0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
+	        //GuiTexture refraction = new GuiTexture( buffers.getRefractionTexture(), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
+	        //GuiTexture reflection = new GuiTexture( buffers.getReflectionTexture(), new Vector2f( -0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
 	        
-	        guis.add( refraction );
-	        guis.add( reflection );
+	        //guis.add( refraction );
+	        //guis.add( reflection );
 	        
 	        while(!Display.isCloseRequested()){
 	        	player.move( terrains );
