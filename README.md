@@ -53,3 +53,6 @@
 
 ### Attenuation
 #### Detta är det som gör att ljusets styrka varierar med avståndet.
+
+### FBO
+#### FBO står för Frame Buffer Object och är som en extra skärm som inte visas upp. Detta kan användas för att rendera yta utan vatten och därför t.ex. skapa en genomskinlighet eller reflektion.
