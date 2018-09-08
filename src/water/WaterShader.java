@@ -23,6 +23,7 @@ public class WaterShader extends ShaderProgram
     private int location_normalMap;
     private int location_lightColour;
     private int location_lightPosition;
+    private int location_depthMap;
 	 
     public WaterShader() 
     {
@@ -46,9 +47,10 @@ public class WaterShader extends ShaderProgram
 		location_dudvMap 			= getUniformLocation( "dudvMap" );
 		location_moveFactor 		= getUniformLocation( "moveFactor" );
 		location_cameraPosition		= getUniformLocation( "cameraPosition" );
-		location_normalMap			= getUniformLocation( "location_normalMap" );
-		location_lightColour		= getUniformLocation( "location_lightColour" );
-		location_lightPosition		= getUniformLocation( "location_lightPosition" );
+		location_normalMap			= getUniformLocation( "normalMap" );
+		location_lightColour		= getUniformLocation( "lightColour" );
+		location_lightPosition		= getUniformLocation( "lightPosition" );
+		location_depthMap			= getUniformLocation( "depthMap" );
     }
     
     public void connectTextureUnits()
@@ -57,6 +59,7 @@ public class WaterShader extends ShaderProgram
     	super.loadInt( location_refractionTexture , 1 );
     	super.loadInt( location_dudvMap, 2 );
     	super.loadInt( location_normalMap, 3 );
+    	super.loadInt( location_depthMap, 4 );
     }
     
     public void loadLight( Light sun )

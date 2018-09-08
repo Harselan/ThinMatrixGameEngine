@@ -22,6 +22,7 @@ import terrains.Terrain;
 public class MasterRenderer 
 {
 	private static final float FOV = 70;
+	// Dessa behöver vara samma på waterfragment filen så om nåt ändras här, ändra där med.
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1000;
 	
