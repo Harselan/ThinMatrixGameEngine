@@ -79,9 +79,15 @@ public class MainGameLoop {
 	        
 	        List<Entity> entities 	= new ArrayList<Entity>();
 	        List<Light> lights 		= new ArrayList<Light>();
+	        List<Terrain> terrains 	= new ArrayList<Terrain>();
 	        
-	        Random random 	= new Random(676452);
-	        Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
+	        Random random 		= new Random(676452);
+	        Terrain terrain1 	= new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
+	        Terrain terrain2 	= new Terrain( -1,-1,loader, texturePack, blendMap, "heightmap" );
+	        
+	        
+	        terrains.add( terrain1 );
+	        terrains.add( terrain2 );
 	        
 	        int length = 800;
 	        
@@ -89,19 +95,53 @@ public class MainGameLoop {
 	        {
 	        	float x = random.nextFloat() * length - 400;
 	        	float z = random.nextFloat() * -600;
-	        	float y = terrain.getHeightOfTerrain( x, z );
+	        	float terrainHeight = 0;
+	        	
+	        	for( Terrain terrain : terrains )
+	    		{
+	    			terrainHeight = terrain.getHeightOfTerrain( x, z );
+	    			
+	    			if( terrainHeight != 0 )
+	    			{
+	    				break;
+	    			}
+	    		}
+	        	
+	        	float y = terrainHeight;
 	        	
 	            entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
 	            
 	            x = random.nextFloat() * length - 400;
 	        	z = random.nextFloat() * -600;
-	        	y = terrain.getHeightOfTerrain( x, z );
+	        	
+	        	for( Terrain terrain : terrains )
+	    		{
+	    			terrainHeight = terrain.getHeightOfTerrain( x, z );
+	    			
+	    			if( terrainHeight != 0 )
+	    			{
+	    				break;
+	    			}
+	    		}
+	        	
+	        	y = terrainHeight;
 	            
 	            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
 	            
 	            x = random.nextFloat() * length - 400;
 	        	z = random.nextFloat() * -600;
-	        	y = terrain.getHeightOfTerrain( x, z );
+	        	
+	        	for( Terrain terrain : terrains )
+	    		{
+	    			terrainHeight = terrain.getHeightOfTerrain( x, z );
+	    			
+	    			if( terrainHeight != 0 )
+	    			{
+	    				break;
+	    			}
+	    		}
+	        	
+	        	y = terrainHeight;
 	        	
 	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
 	            
@@ -109,7 +149,18 @@ public class MainGameLoop {
 	            {
 	            	x = random.nextFloat() * length - 400;
 		        	z = random.nextFloat() * -600;
-		        	y = terrain.getHeightOfTerrain( x, z );
+		        	
+		        	for( Terrain terrain : terrains )
+		    		{
+		    			terrainHeight = terrain.getHeightOfTerrain( x, z );
+		    			
+		    			if( terrainHeight != 0 )
+		    			{
+		    				break;
+		    			}
+		    		}
+		        	
+		        	y = terrainHeight;
 		        	
 		        	lights.add( new Light( new Vector3f( x, y + 13.8f, z ), new Vector3f( random.nextInt( 4 ), random.nextInt( 4 ), random.nextInt( 4 ) ), new Vector3f( 1, 0.01f, 0.002f ) ) );
 		        	entities.add( new Entity( lampModel, new Vector3f( x, y, z ), 0, 0, 0, 1 ) );
@@ -119,6 +170,7 @@ public class MainGameLoop {
 	        
 	        MasterRenderer renderer = new MasterRenderer( loader );
 	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
+	        entities.add( player );
 	        
 	        Camera camera = new Camera( player );
 	         
@@ -130,7 +182,7 @@ public class MainGameLoop {
 	        
 	        GuiRenderer guiRenderer = new GuiRenderer( loader );
 	        
-	        MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), terrain );
+	        MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), terrains );
 	        
 	        Light light = new Light( new Vector3f( 293, 7, -305 ), new Vector3f( 0, 2, 2 ), new Vector3f( 1, 0.01f, 0.002f ) );
 	        lights.add( light );
@@ -138,10 +190,12 @@ public class MainGameLoop {
 	        entities.add( lampEntity );
 	        
 	        while(!Display.isCloseRequested()){
-	        	player.move( terrain );
+	        	player.move( terrains );
 	        	camera.move();
-	        	
 	        	picker.update();
+	        	
+	        	renderer.renderScene( entities, terrains, lights, camera );
+	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 	        	
 	        	if( terrainPoint != null )
@@ -149,15 +203,7 @@ public class MainGameLoop {
 	        		lampEntity.setPosition( terrainPoint );
 	        		light.setPosition( new Vector3f( terrainPoint.x, terrainPoint.y + 15, terrainPoint.z ) );
 	        	}
-	        	
-	            renderer.processEntity(player);
-	            renderer.processTerrain(terrain);
-	            
-	            for(Entity entity:entities){
-	                renderer.processEntity(entity);
-	            }
-	            
-	            renderer.render(lights, camera);
+
 	            guiRenderer.render( guis );
 	            DisplayManager.updateDisplay();
 	        }
