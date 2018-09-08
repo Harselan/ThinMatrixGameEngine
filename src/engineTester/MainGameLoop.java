@@ -27,6 +27,9 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolBox.MousePicker;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 public class MainGameLoop {
 
@@ -189,12 +192,18 @@ public class MainGameLoop {
 	        Entity lampEntity = ( new Entity( lampModel, new Vector3f( 293, -6.8f, -305 ), 0, 0, 0, 1 ) );
 	        entities.add( lampEntity );
 	        
+	        WaterShader waterShader = new WaterShader();
+	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix() );
+	        List<WaterTile> waters = new ArrayList<WaterTile>();
+	        waters.add( new WaterTile( 75, -75, 0 ) );
+	        
 	        while(!Display.isCloseRequested()){
 	        	player.move( terrains );
 	        	camera.move();
 	        	picker.update();
 	        	
 	        	renderer.renderScene( entities, terrains, lights, camera );
+	        	waterRenderer.render( waters, camera );
 	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 	        	
