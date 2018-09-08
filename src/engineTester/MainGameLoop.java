@@ -152,7 +152,7 @@ public class MainGameLoop {
 	        	
 	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
 	            
-	            if( i < 3 )
+	            if( i < 2 )
 	            {
 	            	x = random.nextFloat() * length - 400;
 		        	z = random.nextFloat() * -600;
@@ -233,7 +233,7 @@ public class MainGameLoop {
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
 	        	buffers.unbindCurrentFrameBuffer();
 	        	renderer.renderScene( entities, terrains, lights, camera, new Vector4f( 0, -1, 0, 100000000 ) );
-	        	waterRenderer.render( waters, camera );
+	        	waterRenderer.render( waters, camera, light );
 	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 	        	
