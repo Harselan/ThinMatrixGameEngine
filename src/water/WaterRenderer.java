@@ -11,21 +11,28 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import models.RawModel;
+import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import toolBox.Maths;
  
 public class WaterRenderer 
 {
- 
+	private static final String DUDV_MAP = "waterDUDV";
+	private static final float WAVE_SPEED = 0.03f;
+	
     private RawModel quad;
     private WaterShader shader;
     private WaterFrameBuffers fbos;
  
+    private float moveFactor = 0;
+    
+    private int dudvTexture;
+    
     public WaterRenderer( Loader loader, WaterShader shader, Matrix4f projectionMatrix, WaterFrameBuffers fbos ) 
     {
         this.shader = shader;
         this.fbos 	= fbos;
-        
+        dudvTexture = loader.loadTexture( DUDV_MAP );
         shader.start();
         shader.connectTextureUnits();
         shader.loadProjectionMatrix( projectionMatrix );
@@ -51,12 +58,17 @@ public class WaterRenderer
     {
         shader.start();
         shader.loadViewMatrix( camera );
+        moveFactor += WAVE_SPEED * DisplayManager.getFrameTimeSeconds();
+        moveFactor %= 1;
+        shader.loadMoveFactor( moveFactor );
         GL30.glBindVertexArray( quad.getVaoID() );
         GL20.glEnableVertexAttribArray( 0 );
         GL13.glActiveTexture( GL13.GL_TEXTURE0 );
         GL11.glBindTexture( GL11.GL_TEXTURE_2D, fbos.getReflectionTexture() );
         GL13.glActiveTexture( GL13.GL_TEXTURE1 );
         GL11.glBindTexture( GL11.GL_TEXTURE_2D, fbos.getRefractionTexture() );
+        GL13.glActiveTexture( GL13.GL_TEXTURE2 );
+        GL11.glBindTexture( GL11.GL_TEXTURE_2D, dudvTexture );
     }
      
     private void unbind()
