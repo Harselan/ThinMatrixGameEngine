@@ -56,3 +56,6 @@
 
 ### FBO
 #### FBO står för Frame Buffer Object och är som en extra skärm som inte visas upp. Detta kan användas för att rendera yta utan vatten och därför t.ex. skapa en genomskinlighet eller reflektion.
+
+### Cel Shading
+#### Cel Shading är ett sätt man sätter upp ljusstyrkan på objekt i olika nivåer istället för att det ska gradvis ändras.
