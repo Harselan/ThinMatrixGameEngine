@@ -20,6 +20,8 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
+const float levels = 5;
+
 void main(void)
 {
 	vec4 blendMapColour = texture( blendMap, pass_textureCoords );
@@ -48,11 +50,21 @@ void main(void)
 		float nDotl      = dot( unitNormal, unitLightVector );
 		float brightness = max( nDotl, 0.2 );
 		
+		//Cel Shading
+		float level = floor( brightness * levels );
+		brightness = level / levels;
+		//End of cel shading
+		
 		vec3 lightDirection = -unitLightVector;
 		vec3 reflectedLightDirection = reflect( lightDirection, unitNormal );
 		float specularFactor = dot( reflectedLightDirection, unitVectorToCamera );
 		specularFactor = max( specularFactor, 0.0 );
 		float dampedFactor = pow( specularFactor, shineDamper );
+		
+		//Cel Shading
+		level = floor( dampedFactor * levels );
+		dampedFactor = level / levels;
+		//End of cel shading
 		
 		totalDiffuse  += ( brightness * lightColour[i] ) / attFactor;
 		totalSpecular += ( dampedFactor * reflectivity * lightColour[i] ) / attFactor;
