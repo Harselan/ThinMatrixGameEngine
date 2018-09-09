@@ -59,3 +59,6 @@
 
 ### Cel Shading
 #### Cel Shading är ett sätt man sätter upp ljusstyrkan på objekt i olika nivåer istället för att det ska gradvis ändras.
+
+### Normal Map
+#### Normal Map är en bild som bestämmer hur ljuset ska reflekteras på en model. Detta kan användas för att få platta ytor att verka kurviga och mer detaljerade.
