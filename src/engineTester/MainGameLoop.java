@@ -19,6 +19,7 @@ import guis.GuiRenderer;
 import guis.GuiTexture;
 import models.RawModel;
 import models.TexturedModel;
+import normalMappingObjConverter.NormalMappedObjLoader;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
@@ -84,20 +85,30 @@ public class MainGameLoop {
 	        grass.getTexture().setUseFakeLightning( true );
 	        fern.getTexture().setHasTrasparency( true );
 	        
-	        List<Entity> entities 	= new ArrayList<Entity>();
-	        List<Light> lights 		= new ArrayList<Light>();
-	        List<Terrain> terrains 	= new ArrayList<Terrain>();
+	        //*********** Lists of game objects **********
 	        
-	        Random random 		= new Random(676452);
+	        List<Entity> entities 			= new ArrayList<Entity>();
+	        List<Entity> normalMapEntities 	= new ArrayList<Entity>();
+	        List<Light> lights 				= new ArrayList<Light>();
+	        List<Terrain> terrains 			= new ArrayList<Terrain>();
+	        
+	      	//********************************************
+	        
+	        TexturedModel barrelModel = new TexturedModel( NormalMappedObjLoader.loadOBJ( "barrel", loader ), new ModelTexture( loader.loadTexture( "barrel" ) ) );
+	        
+	        barrelModel.getTexture().setNormalMap( loader.loadTexture( "barrelNormal" ) );
+	        barrelModel.getTexture().setShineDamper( 10 );
+	        barrelModel.getTexture().setReflectivity( 0.5f );
+	        
+	        normalMapEntities.add( new Entity( barrelModel, new Vector3f( 75, 10, -75 ), 0, 0, 0, 1f ) );
+	        
 	        Terrain terrain1 	= new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
 	        Terrain terrain2 	= new Terrain( -1,-1,loader, texturePack, blendMap, "heightmap" );
-	        
-	        
 	        terrains.add( terrain1 );
 	        terrains.add( terrain2 );
 	        
-	        int length = 800;
-	        
+	        int length 			= 800;
+	        Random random 		= new Random(676452);
 	        for( int i = 0; i < length; i++ )
 	        {
 	        	float x = random.nextFloat() * length - 400;
@@ -221,18 +232,18 @@ public class MainGameLoop {
 	        	float distance = 2 * ( camera.getPosition().y - water.getHeight() );
 	        	camera.getPosition().y -= distance;
 	        	camera.invertPitch();
-	        	renderer.renderScene( entities, terrains, lights, camera, new Vector4f( 0, 1, 0, -water.getHeight() + 1 ) );
+	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, 1, 0, -water.getHeight() + 1 ) );
 	        	camera.getPosition().y += distance;
 	        	camera.invertPitch();
 	        	
 	        	//Render refraction texture
 	        	buffers.bindRefractionFrameBuffer();
-	        	renderer.renderScene( entities, terrains, lights, camera, new Vector4f( 0, -1, 0, water.getHeight() ) );
+	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, water.getHeight() ) );
 	        	
 	        	//Render to screen
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
 	        	buffers.unbindCurrentFrameBuffer();
-	        	renderer.renderScene( entities, terrains, lights, camera, new Vector4f( 0, -1, 0, 100000000 ) );
+	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, 100000000 ) );
 	        	waterRenderer.render( waters, camera, light );
 	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();

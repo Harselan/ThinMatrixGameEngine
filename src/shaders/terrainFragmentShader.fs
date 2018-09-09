@@ -51,8 +51,8 @@ void main(void)
 		float brightness = max( nDotl, 0.2 );
 		
 		//Cel Shading
-		float level = floor( brightness * levels );
-		brightness = level / levels;
+		//float level = floor( brightness * levels );
+		//brightness = level / levels;
 		//End of cel shading
 		
 		vec3 lightDirection = -unitLightVector;
@@ -62,8 +62,8 @@ void main(void)
 		float dampedFactor = pow( specularFactor, shineDamper );
 		
 		//Cel Shading
-		level = floor( dampedFactor * levels );
-		dampedFactor = level / levels;
+		//level = floor( dampedFactor * levels );
+		//dampedFactor = level / levels;
 		//End of cel shading
 		
 		totalDiffuse  += ( brightness * lightColour[i] ) / attFactor;

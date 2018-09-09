@@ -50,7 +50,7 @@ public class EntityRenderer
         ModelTexture texture = model.getTexture();
         shader.loadNumberOfRows( texture.getNumberOfRows() );
         
-        if( texture.isHasTrasparency() )
+        if( texture.isHasTransparency() )
         {
         	MasterRenderer.disableCulling();
         }

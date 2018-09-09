@@ -3,6 +3,7 @@ package textures;
 public class ModelTexture 
 {
 	private int textureID;
+	private int normalMap;
 	
 	private float shineDamper = 1;
 	private float reflectivity = 0;
@@ -20,6 +21,16 @@ public class ModelTexture
 	public int getNumberOfRows() 
 	{
 		return numberOfRows;
+	}
+
+	public int getNormalMap() 
+	{
+		return normalMap;
+	}
+
+	public void setNormalMap( int normalMap ) 
+	{
+		this.normalMap = normalMap;
 	}
 
 	public void setNumberOfRows( int numberOfRows ) 
@@ -52,7 +63,7 @@ public class ModelTexture
 		this.reflectivity = reflectivity;
 	}
 
-	public boolean isHasTrasparency() 
+	public boolean isHasTransparency() 
 	{
 		return hasTrasparency;
 	}
