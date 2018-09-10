@@ -1,5 +1,6 @@
 package engineTester;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,9 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import models.RawModel;
@@ -42,6 +46,11 @@ public class MainGameLoop {
 		 
 	        DisplayManager.createDisplay();
 	        Loader loader = new Loader();
+	        TextMaster.init( loader );
+	        
+	        FontType font 	= new FontType( loader.loadFontTexture( "arial" ), new File( "res/arial.fnt" ) );
+	        GUIText text 	= new GUIText( "This is a test text!", 1, font, new Vector2f( 0.5f, 0.5f ), 0.5f, true );
+	        text.setColour( 1, 0, 0 );
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
 	        
@@ -255,15 +264,22 @@ public class MainGameLoop {
 	        	}
 
 	            guiRenderer.render( guis );
+	            TextMaster.render();
+	            
 	            DisplayManager.updateDisplay();
 	        }
 	 
+	        //*********** Clean Up **********
+	        
+	        TextMaster.cleanUp();
 	        buffers.cleanUp();
 	        waterShader.cleanUp();
 	        guiRenderer.cleanUp();
 	        renderer.cleanUp();
 	        loader.cleanUp();
 	        DisplayManager.closeDisplay();
+	        
+	        //********************************************
 	 
 	    }
 }
