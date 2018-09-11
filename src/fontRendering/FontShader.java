@@ -13,6 +13,12 @@ public class FontShader extends ShaderProgram
 	
 	private int location_colour;
 	private int location_translation;
+	private int location_width;
+	private int location_edge;
+	private int location_borderWidth;
+	private int location_borderEdge;
+	private int location_offset;
+	private int location_outlineColour;
 	
 	public FontShader() 
 	{
@@ -24,6 +30,23 @@ public class FontShader extends ShaderProgram
 	{
 		location_colour 		= super.getUniformLocation( "colour" );
 		location_translation 	= super.getUniformLocation( "translation" );
+		
+		location_width 			= super.getUniformLocation( "width" );
+		location_edge 			= super.getUniformLocation( "edge" );
+		location_borderWidth 	= super.getUniformLocation( "borderWidth" );
+		location_borderEdge 	= super.getUniformLocation( "borderEdge" );
+		location_offset 		= super.getUniformLocation( "offset" );
+		location_outlineColour 	= super.getUniformLocation( "outlineColour" );
+	}
+	
+	protected void setStats( float width, float edge, float borderWidth, float borderEdge, Vector2f offset, Vector3f outlineColour )
+	{
+		super.loadFloat( location_width, width );
+		super.loadFloat( location_edge, edge );
+		super.loadFloat( location_borderWidth, borderWidth );
+		super.loadFloat( location_borderEdge, borderEdge );
+		super.load2DVector( location_offset, offset );
+		super.loadVector( location_outlineColour, outlineColour );
 	}
 
 	@Override

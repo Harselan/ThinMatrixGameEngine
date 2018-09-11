@@ -2,11 +2,14 @@ package fontRendering;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
@@ -23,6 +26,17 @@ public class FontRenderer {
 	{
 		prepare();
 		
+		float width 			= 0.5f;
+		float edge 				= 0.1f;
+		float borderWidth 		= 0.5f;
+		float borderEdge 		= 0.4f;
+		Vector2f offset 		= new Vector2f( 0.006f, 0.006f );
+		Vector3f outlineColour 	= new Vector3f( 1f, 0.2f, 0.2f );
+		
+		Random rand = new Random();
+		float minX = 0.0000001f;
+		float maxX = 0.9999999f;
+		
 		for( FontType font : texts.keySet() )
 		{
 			GL13.glActiveTexture( GL13.GL_TEXTURE0 );
@@ -30,7 +44,8 @@ public class FontRenderer {
 			
 			for( GUIText text : texts.get( font ) )
 			{
-				renderText( text );
+				outlineColour = new Vector3f( rand.nextFloat() * (maxX - minX) + minX, rand.nextFloat() * (maxX - minX) + minX, rand.nextFloat() * (maxX - minX) + minX );
+				renderText( text, width, edge, borderWidth, borderEdge, offset, outlineColour );
 			}
 		}
 		endRendering();
@@ -48,12 +63,13 @@ public class FontRenderer {
 		shader.start();
 	}
 	
-	private void renderText( GUIText text )
-	{
+	private void renderText( GUIText text, float width, float edge, float borderWidth, float borderEdge, Vector2f offset, Vector3f outlineColour )
+	{	
 		GL30.glBindVertexArray( text.getMesh() );
 		GL20.glEnableVertexAttribArray( 0 );
 		GL20.glEnableVertexAttribArray( 1 );
 		
+		shader.setStats( width, edge, borderWidth, borderEdge, offset, outlineColour );
 		shader.loadColour( text.getColour() );
 		shader.loadTranslation( text.getPosition() );
 		GL11.glDrawArrays( GL11.GL_TRIANGLES, 0, text.getVertexCount() );

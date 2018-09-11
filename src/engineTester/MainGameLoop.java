@@ -48,9 +48,9 @@ public class MainGameLoop {
 	        Loader loader = new Loader();
 	        TextMaster.init( loader );
 	        
-	        FontType font 	= new FontType( loader.loadFontTexture( "arial" ), new File( "res/arial.fnt" ) );
-	        GUIText text 	= new GUIText( "This is a test text!", 1, font, new Vector2f( 0.5f, 0.5f ), 0.5f, true );
-	        text.setColour( 1, 0, 0 );
+	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
+	        GUIText text 	= new GUIText( "This is a test text!", 3, font, new Vector2f( 0.0f, 0.4f ), 1f, true );
+	        text.setColour( 0, 0, 0 );
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
 	        
