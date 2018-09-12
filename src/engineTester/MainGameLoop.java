@@ -26,6 +26,8 @@ import models.TexturedModel;
 import normalMappingObjConverter.NormalMappedObjLoader;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
+import particles.ParticleMaster;
+import particles.ParticleSystem;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -47,9 +49,11 @@ public class MainGameLoop {
 	        DisplayManager.createDisplay();
 	        Loader loader = new Loader();
 	        TextMaster.init( loader );
+	        MasterRenderer renderer = new MasterRenderer( loader );
+	        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
 	        
 	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
-	        GUIText text 	= new GUIText( "This is a test text!", 3, font, new Vector2f( 0.0f, 0.4f ), 1f, true );
+	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( 0.0f, 0.4f ), 1f, true );
 	        text.setColour( 0, 0, 0 );
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
@@ -195,7 +199,6 @@ public class MainGameLoop {
 
 	        }
 	        
-	        MasterRenderer renderer = new MasterRenderer( loader );
 	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
 	        entities.add( player );
 	        
@@ -222,17 +225,29 @@ public class MainGameLoop {
 	        List<WaterTile> waters = new ArrayList<WaterTile>();
 	        WaterTile water = new WaterTile( 300, -300, 10 );
 	        waters.add( water );
+
+	        //*********** Particle System Example **********
 	        
-	        //GuiTexture refraction = new GuiTexture( buffers.getRefractionTexture(), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
-	        //GuiTexture reflection = new GuiTexture( buffers.getReflectionTexture(), new Vector2f( -0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
+	        ParticleSystem system = new ParticleSystem( 50, 25, 0.3f, 4, 1 );
 	        
-	        //guis.add( refraction );
-	        //guis.add( reflection );
+	        system.randomizeRotation();
+	        system.setDirection( new Vector3f( 0, 1, 0 ), 0.1f );
+	        system.setLifeError( 0.1f );
+	        system.setSpeedError( 0.4f );
+	        system.setScaleError( 0.8f );
+	        
+	        //********************************************
+	        
+	        //*********** Game Loop Below **********
 	        
 	        while(!Display.isCloseRequested()){
 	        	player.move( terrains );
 	        	camera.move();
 	        	picker.update();
+	        	
+	        	system.generateParticles( player.getPosition() );
+	        	
+	        	ParticleMaster.update();
 	        	
 	        	GL11.glEnable( GL30.GL_CLIP_DISTANCE0 );
 	        	
@@ -263,14 +278,18 @@ public class MainGameLoop {
 	        		light.setPosition( new Vector3f( terrainPoint.x, terrainPoint.y + 15, terrainPoint.z ) );
 	        	}
 
+	        	ParticleMaster.renderParticles( camera );
+	        	
 	            guiRenderer.render( guis );
 	            TextMaster.render();
 	            
 	            DisplayManager.updateDisplay();
 	        }
+	        
+	        //********************************************
 	 
 	        //*********** Clean Up **********
-	        
+	        ParticleMaster.cleanUp();
 	        TextMaster.cleanUp();
 	        buffers.cleanUp();
 	        waterShader.cleanUp();

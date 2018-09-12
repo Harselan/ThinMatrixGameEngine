@@ -30,7 +30,8 @@ public class MasterRenderer
 	public static final float RED   = 0.5444f;
 	public static final float GREEN = 0.62f;
 	public static final float BLUE  = 0.69f;
-	 
+	public static final float GRAVITY = -50; 
+	
 	private Matrix4f projectionMatrix;
 	 
 	private StaticShader shader = new StaticShader();
