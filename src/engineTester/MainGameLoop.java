@@ -28,6 +28,7 @@ import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import particles.ParticleMaster;
 import particles.ParticleSystem;
+import particles.ParticleTexture;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -53,7 +54,7 @@ public class MainGameLoop {
 	        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
 	        
 	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
-	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( 0.0f, 0.4f ), 1f, true );
+	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( -0.25f, 0.02f ), 1f, true );
 	        text.setColour( 0, 0, 0 );
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
@@ -228,13 +229,15 @@ public class MainGameLoop {
 
 	        //*********** Particle System Example **********
 	        
-	        ParticleSystem system = new ParticleSystem( 50, 25, 0.3f, 4, 1 );
+	        ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleAtlas" ), 4, false ); 
+	        
+	        ParticleSystem system = new ParticleSystem( particleTexture, 40, 10, 0.1f, 1, 1.6f );
 	        
 	        system.randomizeRotation();
 	        system.setDirection( new Vector3f( 0, 1, 0 ), 0.1f );
 	        system.setLifeError( 0.1f );
-	        system.setSpeedError( 0.4f );
-	        system.setScaleError( 0.8f );
+	        system.setSpeedError( 0.25f );
+	        system.setScaleError( 0.5f );
 	        
 	        //********************************************
 	        
@@ -247,7 +250,7 @@ public class MainGameLoop {
 	        	
 	        	system.generateParticles( player.getPosition() );
 	        	
-	        	ParticleMaster.update();
+	        	ParticleMaster.update( camera );
 	        	
 	        	GL11.glEnable( GL30.GL_CLIP_DISTANCE0 );
 	        	
