@@ -16,14 +16,16 @@ public class Particle
 	private float rotation;
 	private float scale;
 	
+	private float elapsedTime = 0;
+	
 	private ParticleTexture texture;
 	
 	private Vector2f texOffset1 = new Vector2f();
 	private Vector2f texOffset2 = new Vector2f();
 	private float blend;
-	
-	private float elapsedTime = 0;
 	private float distance;
+	
+	private Vector3f reusableChange = new Vector3f();
 
 	public Particle( ParticleTexture texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation,
 			float scale ) 
@@ -68,10 +70,10 @@ public class Particle
 	{
 		velocity.y += MasterRenderer.GRAVITY * gravityEffect * DisplayManager.getFrameTimeSeconds();
 		
-		Vector3f change = new Vector3f( velocity );
+		reusableChange.set( velocity );
+		reusableChange.scale( DisplayManager.getFrameTimeSeconds() );
 		
-		change.scale( DisplayManager.getFrameTimeSeconds() );
-		Vector3f.add( change, position, position );
+		Vector3f.add( reusableChange, position, position );
 		distance = Vector3f.sub( camera.getPosition(), position, null ).lengthSquared();
 		updateTextureCoordInfo();
 		elapsedTime += DisplayManager.getFrameTimeSeconds();

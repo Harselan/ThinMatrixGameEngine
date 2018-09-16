@@ -22,7 +22,7 @@ public class ParticleTexture
 		return numberOfRows;
 	}
 	
-	public boolean usesAdditiveBlending()
+	public boolean isAdditive()
 	{
 		return additive;
 	}
