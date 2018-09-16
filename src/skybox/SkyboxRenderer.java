@@ -14,7 +14,8 @@ import renderEngine.MasterRenderer;
 
 public class SkyboxRenderer 
 {
-private static final float SIZE = 500f;
+	private static final float SIZE = 500f;
+	private static String STATE 	= "DAY";
 	
 	private static final float[] VERTICES = {        
 	    -SIZE,  SIZE, -SIZE,

@@ -77,6 +77,21 @@ public class MainGameLoop {
 	        
 	        //********************************************
 	        
+	        //*********** MODELS WITH NORMAL MAP **********
+	        
+	        TexturedModel barrelModel 	= new TexturedModel( NormalMappedObjLoader.loadOBJ( "barrel", loader ), new ModelTexture( loader.loadTexture( "barrel" ) ) );
+	        TexturedModel stoneModel 	= new TexturedModel( NormalMappedObjLoader.loadOBJ( "boulder", loader ), new ModelTexture( loader.loadTexture( "boulder" ) ) );
+	        
+	        barrelModel.getTexture().setNormalMap( loader.loadTexture( "barrelNormal" ) );
+	        barrelModel.getTexture().setShineDamper( 10 );
+	        barrelModel.getTexture().setReflectivity( 0.5f );
+	        
+	        stoneModel.getTexture().setNormalMap( loader.loadTexture( "boulderNormal" ) );
+	        stoneModel.getTexture().setShineDamper( 10 );
+	        stoneModel.getTexture().setReflectivity( 0.5f );
+	        
+	        //********************************************
+	        
 	        //*********** MODEL TEXTURES **********
 	        
 	        ModelTexture fernTextureAtlas = new ModelTexture( loader.loadTexture( "fern" ) );
@@ -108,12 +123,6 @@ public class MainGameLoop {
 	        
 	      	//********************************************
 	        
-	        TexturedModel barrelModel = new TexturedModel( NormalMappedObjLoader.loadOBJ( "barrel", loader ), new ModelTexture( loader.loadTexture( "barrel" ) ) );
-	        
-	        barrelModel.getTexture().setNormalMap( loader.loadTexture( "barrelNormal" ) );
-	        barrelModel.getTexture().setShineDamper( 10 );
-	        barrelModel.getTexture().setReflectivity( 0.5f );
-	        
 	        normalMapEntities.add( new Entity( barrelModel, new Vector3f( 75, 10, -75 ), 0, 0, 0, 1f ) );
 	        
 	        Terrain terrain1 	= new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
@@ -123,6 +132,7 @@ public class MainGameLoop {
 	        
 	        int length 			= 800;
 	        Random random 		= new Random(676452);
+	        
 	        for( int i = 0; i < length; i++ )
 	        {
 	        	float x = random.nextFloat() * length - 400;
@@ -141,41 +151,18 @@ public class MainGameLoop {
 	        	
 	        	float y = terrainHeight;
 	        	
-	            entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
-	            
-	            x = random.nextFloat() * length - 400;
-	        	z = random.nextFloat() * -600;
-	        	
-	        	for( Terrain terrain : terrains )
-	    		{
-	    			terrainHeight = terrain.getHeightOfTerrain( x, z );
-	    			
-	    			if( terrainHeight != 0 )
-	    			{
-	    				break;
-	    			}
-	    		}
-	        	
-	        	y = terrainHeight;
-	            
-	            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
-	            
-	            x = random.nextFloat() * length - 400;
-	        	z = random.nextFloat() * -600;
-	        	
-	        	for( Terrain terrain : terrains )
-	    		{
-	    			terrainHeight = terrain.getHeightOfTerrain( x, z );
-	    			
-	    			if( terrainHeight != 0 )
-	    			{
-	    				break;
-	    			}
-	    		}
-	        	
-	        	y = terrainHeight;
-	        	
-	            entities.add(new Entity(fern, random.nextInt( 4 ), new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
+	        	if( y > 1 )
+	        	{
+	        		entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
+		            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
+		            entities.add(new Entity(fern, new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
+		            
+		            if( i % 49 == 0 )
+		            {
+		            	normalMapEntities.add( new Entity( stoneModel, new Vector3f( x, y, z ), 0, 0, 0, 1f ) );
+		            }
+		            
+	        	}
 	            
 	            if( i < 2 )
 	            {
@@ -224,8 +211,14 @@ public class MainGameLoop {
 	        WaterShader waterShader = new WaterShader();
 	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix(), buffers );
 	        List<WaterTile> waters = new ArrayList<WaterTile>();
-	        WaterTile water = new WaterTile( 300, -300, 10 );
-	        waters.add( water );
+	        
+	        for( int i = 0; i < 2; i++ )
+	        {
+	        	for( int j = 0; j < 2; j++ )
+	        	{
+	        		waters.add( new WaterTile( i * WaterTile.TILE_SIZE, -j * WaterTile.TILE_SIZE - 100, 1 ) );
+	        	}
+	        }
 
 	        //*********** Particle System Example **********
 	        
@@ -254,18 +247,21 @@ public class MainGameLoop {
 	        	
 	        	GL11.glEnable( GL30.GL_CLIP_DISTANCE0 );
 	        	
-	        	//Render reflection texture
-	        	buffers.bindReflectionFrameBuffer();
-	        	float distance = 2 * ( camera.getPosition().y - water.getHeight() );
-	        	camera.getPosition().y -= distance;
-	        	camera.invertPitch();
-	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, 1, 0, -water.getHeight() + 1 ) );
-	        	camera.getPosition().y += distance;
-	        	camera.invertPitch();
-	        	
-	        	//Render refraction texture
-	        	buffers.bindRefractionFrameBuffer();
-	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, water.getHeight() ) );
+	        	for( WaterTile water : waters )
+	        	{
+	        		//Render reflection texture
+		        	buffers.bindReflectionFrameBuffer();
+		        	float distance = 2 * ( camera.getPosition().y - water.getHeight() );
+		        	camera.getPosition().y -= distance;
+		        	camera.invertPitch();
+		        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, 1, 0, -water.getHeight() + 1 ) );
+		        	camera.getPosition().y += distance;
+		        	camera.invertPitch();
+		        	
+		        	//Render refraction texture
+		        	buffers.bindRefractionFrameBuffer();
+		        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, water.getHeight() ) );
+	        	}	
 	        	
 	        	//Render to screen
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
