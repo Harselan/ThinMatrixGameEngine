@@ -216,7 +216,7 @@ public class MainGameLoop {
 	        {
 	        	for( int j = 0; j < 2; j++ )
 	        	{
-	        		waters.add( new WaterTile( i * WaterTile.TILE_SIZE, -j * WaterTile.TILE_SIZE - 100, 1 ) );
+	        		waters.add( new WaterTile( i * WaterTile.TILE_SIZE, -j * WaterTile.TILE_SIZE - 100, -5 ) );
 	        	}
 	        }
 
