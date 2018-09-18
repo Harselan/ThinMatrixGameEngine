@@ -50,12 +50,6 @@ public class MainGameLoop {
 	        DisplayManager.createDisplay();
 	        Loader loader = new Loader();
 	        TextMaster.init( loader );
-	        MasterRenderer renderer = new MasterRenderer( loader );
-	        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
-	        
-	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
-	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( -0.25f, 0.02f ), 1f, true );
-	        text.setColour( 0, 0, 0 );
 	        
 	        //*********** TERRAIN TEXTURE STUFF **********
 	        
@@ -110,10 +104,6 @@ public class MainGameLoop {
 	        
 	        //********************************************
 	        
-	        grass.getTexture().setHasTrasparency( true );
-	        grass.getTexture().setUseFakeLightning( true );
-	        fern.getTexture().setHasTrasparency( true );
-	        
 	        //*********** Lists of game objects **********
 	        
 	        List<Entity> entities 			= new ArrayList<Entity>();
@@ -122,6 +112,25 @@ public class MainGameLoop {
 	        List<Terrain> terrains 			= new ArrayList<Terrain>();
 	        
 	      	//********************************************
+	        
+	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
+	        entities.add( player );
+	        
+	        Camera camera = new Camera( player );
+	        
+	        MasterRenderer renderer = new MasterRenderer( loader, camera );
+	        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
+	        
+	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
+	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( -0.25f, 0.02f ), 1f, true );
+	        text.setColour( 0, 0, 0 );
+	        
+	        grass.getTexture().setHasTrasparency( true );
+	        grass.getTexture().setUseFakeLightning( true );
+	        fern.getTexture().setHasTrasparency( true );
+	        
+	        Light sun = new Light( new Vector3f( 10000000, 15000000, -10000000 ), new Vector3f( 1.3f, 1.3f, 1.3f ) );
+	        lights.add( sun );
 	        
 	        normalMapEntities.add( new Entity( barrelModel, new Vector3f( 75, 10, -75 ), 0, 0, 0, 1f ) );
 	        
@@ -186,11 +195,6 @@ public class MainGameLoop {
 	            }
 
 	        }
-	        
-	        Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
-	        entities.add( player );
-	        
-	        Camera camera = new Camera( player );
 	         
 	        List<GuiTexture> guis = new ArrayList<GuiTexture>();
 	        //GuiTexture gui = new GuiTexture( loader.loadTexture( "socuwan" ), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.25f, 0.25f ) );
@@ -200,6 +204,8 @@ public class MainGameLoop {
 	        
 	        GuiRenderer guiRenderer = new GuiRenderer( loader );
 	        
+	        GuiTexture shadowMap = new GuiTexture( renderer.getShadowMapTexture(), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.5f, 0.5f ) );
+	        guis.add( shadowMap );
 	        MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), terrains );
 	        
 	        Light light = new Light( new Vector3f( 293, 7, -305 ), new Vector3f( 0, 2, 2 ), new Vector3f( 1, 0.01f, 0.002f ) );
@@ -244,6 +250,7 @@ public class MainGameLoop {
 	        	system.generateParticles( player.getPosition() );
 	        	
 	        	ParticleMaster.update( camera );
+	        	renderer.renderShadowMap( entities, sun );
 	        	
 	        	GL11.glEnable( GL30.GL_CLIP_DISTANCE0 );
 	        	

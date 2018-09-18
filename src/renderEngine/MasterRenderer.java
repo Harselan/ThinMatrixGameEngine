@@ -17,15 +17,16 @@ import models.TexturedModel;
 import normalMappingRenderer.NormalMappingRenderer;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import shadows.ShadowMapMasterRenderer;
 import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
 public class MasterRenderer 
 {
-	private static final float FOV = 70;
+	public static final float FOV = 70;
 	// Dessa behöver vara samma på waterfragment filen så om nåt ändras här, ändra där med.
-	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 1000;
+	public static final float NEAR_PLANE = 0.1f;
+	public static final float FAR_PLANE = 1000;
 	
 	public static final float RED   = 0.5444f;
 	public static final float GREEN = 0.62f;
@@ -48,14 +49,17 @@ public class MasterRenderer
 	private NormalMappingRenderer normalMapRenderer;
 	
 	private SkyboxRenderer skyboxRenderer;
+	private ShadowMapMasterRenderer shadowMapRenderer;
 	 
-	public MasterRenderer( Loader loader ){
+	public MasterRenderer( Loader loader, Camera cam )
+	{
 		enableCulling();
 	    createProjectionMatrix();
 	    renderer = new EntityRenderer( shader, projectionMatrix );
 	    terrainRenderer = new TerrainRenderer( terrainShader, projectionMatrix );
 	    skyboxRenderer = new SkyboxRenderer( loader, projectionMatrix );
 	    normalMapRenderer = new NormalMappingRenderer( projectionMatrix );
+	    this.shadowMapRenderer = new ShadowMapMasterRenderer( cam );
 	}
 	
 	public static void enableCulling()
@@ -117,8 +121,9 @@ public class MasterRenderer
         normalMapEntities.clear();
     }
      
-    public void processTerrain(Terrain terrain){
-        terrains.add(terrain);
+    public void processTerrain( Terrain terrain )
+    {
+        terrains.add( terrain );
     }
     
     public void processEntity( Entity entity )
@@ -155,10 +160,28 @@ public class MasterRenderer
         }
     }
      
-    public void cleanUp(){
+    public void renderShadowMap( List<Entity> entityList, Light sun )
+    {
+    	for( Entity entity : entityList )
+    	{
+    		processEntity( entity );
+    	}
+    	
+    	shadowMapRenderer.render( entities, sun );
+    	entities.clear();
+    }
+    
+    public int getShadowMapTexture()
+    {
+    	return shadowMapRenderer.getShadowMap();
+    }
+    
+    public void cleanUp()
+    {
         shader.cleanUp();
         terrainShader.cleanUp();
         normalMapRenderer.cleanUp();
+        shadowMapRenderer.cleanUp();
     }
      
     public void prepare() {
@@ -172,18 +195,19 @@ public class MasterRenderer
     	return projectionMatrix;
     }
      
-    private void createProjectionMatrix() {
-        float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = FAR_PLANE - NEAR_PLANE;
- 
-        projectionMatrix = new Matrix4f();
-        projectionMatrix.m00 = x_scale;
-        projectionMatrix.m11 = y_scale;
-        projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
-        projectionMatrix.m23 = -1;
-        projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
-        projectionMatrix.m33 = 0;
+    private void createProjectionMatrix()
+    {
+    	projectionMatrix = new Matrix4f();
+		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
+		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
+		float x_scale = y_scale / aspectRatio;
+		float frustum_length = FAR_PLANE - NEAR_PLANE;
+
+		projectionMatrix.m00 = x_scale;
+		projectionMatrix.m11 = y_scale;
+		projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
+		projectionMatrix.m23 = -1;
+		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
+		projectionMatrix.m33 = 0;
     }
 }
