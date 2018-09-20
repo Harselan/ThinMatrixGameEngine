@@ -18,11 +18,11 @@ import toolBox.Maths;
 
 public class Terrain {
     
-    private static final float SIZE = 800;
-    private static final float MAX_HEIGHT = 40;
+    private static final float SIZE = 1200;
+    private static final float MAX_HEIGHT = 80;
     private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
      
-    private static final int VERTEX_COUNT = 256;
+    private static final int VERTEX_COUNT = 1024;
     private static final int SEED = new Random().nextInt( 1000000000 );
     
     private float x;

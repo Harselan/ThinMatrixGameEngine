@@ -22,7 +22,7 @@ public class HeightsGenerator
 	 * 
 	 */
 
-    private static final float AMPLITUDE 	= 70f;
+    private static final float AMPLITUDE 	= 35f;
     private static final int OCTAVES 		= 3;
     private static final float ROUGHNESS 	= 0.3f;
  

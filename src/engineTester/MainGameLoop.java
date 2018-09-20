@@ -205,7 +205,7 @@ public class MainGameLoop {
 	        GuiRenderer guiRenderer = new GuiRenderer( loader );
 	        
 	        GuiTexture shadowMap = new GuiTexture( renderer.getShadowMapTexture(), new Vector2f( 0.5f, 0.5f ), new Vector2f( 0.5f, 0.5f ) );
-	        guis.add( shadowMap );
+	        //guis.add( shadowMap );
 	        MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), terrains );
 	        
 	        Light light = new Light( new Vector3f( 293, 7, -305 ), new Vector3f( 0, 2, 2 ), new Vector3f( 1, 0.01f, 0.002f ) );

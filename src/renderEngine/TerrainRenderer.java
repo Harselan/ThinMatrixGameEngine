@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.RawModel;
 import shaders.TerrainShader;
+import shadows.ShadowBox;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexturePack;
@@ -28,12 +29,16 @@ public class TerrainRenderer {
         shader.stop();
     }
  
-    public void render(List<Terrain> terrains) {
-        for (Terrain terrain : terrains) {
-            prepareTerrain(terrain);
-            loadModelMatrix(terrain);
-            GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getModel().getVertexCount(),
-                    GL11.GL_UNSIGNED_INT, 0);
+    public void render( List<Terrain> terrains, Matrix4f toShadowSpace ) 
+    {
+    	shader.loadToShadowSpaceMatrix( toShadowSpace );
+    	shader.loadTerrainDistance( ShadowBox.getDistance() );
+        for ( Terrain terrain : terrains ) 
+        {
+            prepareTerrain( terrain );
+            loadModelMatrix( terrain );
+            GL11.glDrawElements( GL11.GL_TRIANGLES, terrain.getModel().getVertexCount(),
+                    GL11.GL_UNSIGNED_INT, 0 );
             unbindTexturedModel();
         }
     }
