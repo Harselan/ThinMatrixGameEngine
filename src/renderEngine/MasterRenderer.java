@@ -103,7 +103,7 @@ public class MasterRenderer
         shader.loadSkyColour( RED, GREEN, BLUE );
         shader.loadLights( lights );
         shader.loadViewMatrix( camera );
-        renderer.render( entities );
+        renderer.render( entities, shadowMapRenderer.getToShadowMapSpaceMatrix() );
         
         shader.stop();
         normalMapRenderer.render( normalMapEntities, clipPlane, lights, camera );

@@ -65,9 +65,10 @@ public class MainGameLoop {
 	        
 	        //*********** RAW MODELS **********
 	        
-	        ModelData data 			= OBJFileLoader.loadOBJ("tree");   
+	        ModelData data 			= OBJFileLoader.loadOBJ("pine");   
 	        RawModel treeModel 		= loader.loadToVAO( data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices() );
 	        RawModel playerModel 	= OBJLoader.loadObjModel( "person", loader );
+	        RawModel stallModel     = OBJLoader.loadObjModel( "stall", loader );
 	        
 	        //********************************************
 	        
@@ -96,11 +97,12 @@ public class MainGameLoop {
 	        
 	        //*********** TEXTURED MODELS **********
 	        
-	        TexturedModel staticModel 	= new TexturedModel( treeModel,new ModelTexture(loader.loadTexture("tree")));
+	        TexturedModel staticModel 	= new TexturedModel( treeModel,new ModelTexture(loader.loadTexture("pine")));
 	        TexturedModel grass 		= new TexturedModel( OBJLoader.loadObjModel( "grassModel", loader ), new ModelTexture( loader.loadTexture( "grassTexture" ) ) );
 	        TexturedModel fern 			= new TexturedModel( OBJLoader.loadObjModel( "fern", loader ), fernTextureAtlas );
 	        TexturedModel lampModel 	= new TexturedModel( OBJLoader.loadObjModel( "lamp", loader ), new ModelTexture( loader.loadTexture("lamp") ) );
 	        TexturedModel playerTexture = new TexturedModel( playerModel, new ModelTexture( loader.loadTexture( "playerTexture" ) ) );
+	        TexturedModel stallTexture  = new TexturedModel( stallModel, new ModelTexture( loader.loadTexture( "stallTexture" ) ) );
 	        
 	        //********************************************
 	        
@@ -171,6 +173,11 @@ public class MainGameLoop {
 		            	normalMapEntities.add( new Entity( stoneModel, new Vector3f( x, y, z ), 0, 0, 0, 1f ) );
 		            }
 		            
+		            if( i % 59 == 0 )
+		            {
+		            	entities.add( new Entity( stallTexture, new Vector3f( x, y, z ), 0, 0, 0, 3 ) );
+		            }
+		            
 	        	}
 	            
 	            if( i < 2 )
@@ -228,7 +235,7 @@ public class MainGameLoop {
 
 	        //*********** Particle System Example **********
 	        
-	        ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleAtlas" ), 4, false ); 
+	        /*ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleAtlas" ), 4, false ); 
 	        
 	        ParticleSystem system = new ParticleSystem( particleTexture, 40, 10, 0.1f, 1, 1.6f );
 	        
@@ -236,7 +243,7 @@ public class MainGameLoop {
 	        system.setDirection( new Vector3f( 0, 1, 0 ), 0.1f );
 	        system.setLifeError( 0.1f );
 	        system.setSpeedError( 0.25f );
-	        system.setScaleError( 0.5f );
+	        system.setScaleError( 0.5f );*/
 	        
 	        //********************************************
 	        
@@ -247,7 +254,7 @@ public class MainGameLoop {
 	        	camera.move();
 	        	picker.update();
 	        	
-	        	system.generateParticles( player.getPosition() );
+	        	//system.generateParticles( player.getPosition() );
 	        	
 	        	ParticleMaster.update( camera );
 	        	renderer.renderShadowMap( entities, sun );
