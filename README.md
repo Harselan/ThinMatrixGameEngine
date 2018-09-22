@@ -62,3 +62,9 @@
 
 ### Normal Map
 #### Normal Map är en bild som bestämmer hur ljuset ska reflekteras på en model. Detta kan användas för att få platta ytor att verka kurviga och mer detaljerade.
+
+### Anisotropic Filtering
+#### är som MipMapping förutom att den är mer avancerad och kan använda olika upplösningar från olika vinklar vilket löser problemet med att texturen stretchas ut.
+
+### Anti Aliasing
+#### Anti Aliasing är en metod som används för att få objekten på spelet att verka mindre pixlade när man kollar nära på den med hjälp av att den tar fyra tester kommer tas per pixel istället för en så att de hårda kanterna på varje pixel blir mer utjämnade. 
