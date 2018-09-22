@@ -35,6 +35,7 @@ public class TerrainShader extends ShaderProgram
 	private int location_toShadowMapSpace;
 	private int location_shadowMap;
 	private int location_shadowDistance;
+	private int location_mapSize;
 	
 	public TerrainShader() 
 	{
@@ -66,6 +67,7 @@ public class TerrainShader extends ShaderProgram
 		location_toShadowMapSpace		= super.getUniformLocation( "toShadowMapSpace" );
 		location_shadowMap				= super.getUniformLocation( "shadowMap" );
 		location_shadowDistance			= super.getUniformLocation( "shadowDistance" );
+		location_mapSize				= super.getUniformLocation( "mapSize" );
 		
 		location_lightPosition			= new int[MAX_LIGHTS];
 		location_lightColour			= new int[MAX_LIGHTS];
@@ -87,6 +89,11 @@ public class TerrainShader extends ShaderProgram
 		super.loadInt( location_bTexture, 3 );
 		super.loadInt( location_blendMap, 4 );
 		super.loadInt( location_shadowMap, 5 );
+	}
+	
+	public void loadMapSize( float mapSize )
+	{
+		super.loadFloat( location_mapSize, mapSize );
 	}
 	
 	public void loadToShadowSpaceMatrix( Matrix4f matrix )

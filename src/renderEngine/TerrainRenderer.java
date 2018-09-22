@@ -12,8 +12,8 @@ import org.lwjgl.util.vector.Vector3f;
 import models.RawModel;
 import shaders.TerrainShader;
 import shadows.ShadowBox;
+import shadows.ShadowMapMasterRenderer;
 import terrains.Terrain;
-import textures.ModelTexture;
 import textures.TerrainTexturePack;
 import toolBox.Maths;
 
@@ -33,7 +33,9 @@ public class TerrainRenderer {
     {
     	shader.loadToShadowSpaceMatrix( toShadowSpace );
     	shader.loadTerrainDistance( ShadowBox.getDistance() );
-        for ( Terrain terrain : terrains ) 
+    	shader.loadMapSize( ShadowMapMasterRenderer.SHADOW_MAP_SIZE );
+    	
+    	for ( Terrain terrain : terrains ) 
         {
             prepareTerrain( terrain );
             loadModelMatrix( terrain );
