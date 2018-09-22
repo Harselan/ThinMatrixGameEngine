@@ -3,6 +3,7 @@ package renderEngine;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -115,11 +116,12 @@ public class Loader
 		
 		try 
 		{
-			texture = TextureLoader.getTexture("PMG", new FileInputStream( "res/" + fileName+".png" ));
+			
+			texture = TextureLoader.getTexture( "PNG", Class.class.getResourceAsStream( "/res/" + fileName + ".png" ) );
 			GL30.glGenerateMipmap( GL11.GL_TEXTURE_2D );
 			GL11.glTexParameteri( GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR );
 			GL11.glTexParameterf( GL11.GL_TEXTURE_2D , GL14.GL_TEXTURE_LOD_BIAS, 0 );
-			
+
 			if( GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic )
 			{
 				float amount = Math.min( 4f, GL11.glGetFloat( EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT ) );
@@ -152,7 +154,7 @@ public class Loader
 		
 		try 
 		{
-			texture = TextureLoader.getTexture("PMG", new FileInputStream( "res/" + fileName+".png" ));
+			texture = TextureLoader.getTexture("PMG", Class.class.getResourceAsStream( "/res/" + fileName + ".png" ));
 			GL30.glGenerateMipmap( GL11.GL_TEXTURE_2D );
 			GL11.glTexParameteri( GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR );
 			GL11.glTexParameterf( GL11.GL_TEXTURE_2D , GL14.GL_TEXTURE_LOD_BIAS, 0 );
@@ -202,7 +204,7 @@ public class Loader
 		 */
 		for( int i = 0; i < textureFiles.length; i++ )
 		{
-			TextureData data = decodeTextureFile( "res/" + textureFiles[i] + ".png" );
+			TextureData data = decodeTextureFile( textureFiles[i] );
 			GL11.glTexImage2D( GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer() );
 		}
 		
@@ -222,7 +224,7 @@ public class Loader
 		
 		try
 		{
-			FileInputStream in = new FileInputStream( fileName );
+			InputStream in = Class.class.getResourceAsStream( "/res/" + fileName + ".png" );
 			PNGDecoder decoder = new PNGDecoder( in );
 			width = decoder.getWidth();
 			height = decoder.getHeight();

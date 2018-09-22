@@ -1,9 +1,7 @@
 package renderEngine;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +14,8 @@ public class OBJLoader
 {
 	public static RawModel loadObjModel( String fileName, Loader loader )
 	{
-		FileReader fr = null;
-		
-		try 
-		{
-			fr = new FileReader( new File( "res/"+fileName+".obj" ) );
-		} 
-		catch ( FileNotFoundException e ) 
-		{
-			System.err.println( "Could not load file, tried to load file with path res/" + fileName + ".obj" );
-			e.printStackTrace();
-		}
-		
-		BufferedReader reader = new BufferedReader( fr );
+		InputStreamReader isr = new InputStreamReader( Class.class.getResourceAsStream( "/res/" + fileName + ".obj" ) );
+		BufferedReader reader = new BufferedReader( isr );
 		String line;
 		
 		List<Vector3f> vertices = new ArrayList<Vector3f>();

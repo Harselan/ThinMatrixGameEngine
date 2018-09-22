@@ -123,7 +123,7 @@ public class MainGameLoop {
 	        MasterRenderer renderer = new MasterRenderer( loader, camera );
 	        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
 	        
-	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), new File( "res/candara.fnt" ) );
+	        FontType font 	= new FontType( loader.loadFontTexture( "candara" ), "candara" );
 	        GUIText text 	= new GUIText( "PARTY HARD", 6, font, new Vector2f( -0.25f, 0.02f ), 1f, true );
 	        text.setColour( 0, 0, 0 );
 	        

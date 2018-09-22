@@ -122,7 +122,7 @@ public class Terrain {
 		
 		try 
 		{
-			image = ImageIO.read( new File( "res/" + heightMap + ".png" ) );
+			image = ImageIO.read( Class.class.getResourceAsStream( "/res/" + heightMap + ".png" ) );
 		} 
 		catch( IOException e ) 
 		{
