@@ -75,10 +75,20 @@ public class MainGameLoop {
 	        
 	        TexturedModel barrelModel 	= new TexturedModel( NormalMappedObjLoader.loadOBJ( "barrel", loader ), new ModelTexture( loader.loadTexture( "barrel" ) ) );
 	        TexturedModel stoneModel 	= new TexturedModel( NormalMappedObjLoader.loadOBJ( "boulder", loader ), new ModelTexture( loader.loadTexture( "boulder" ) ) );
+	        TexturedModel cherryModel 	= new TexturedModel( OBJLoader.loadObjModel( "cherry", loader ), new ModelTexture( loader.loadTexture( "cherry" ) ) );
+	        TexturedModel lantern 		= new TexturedModel( OBJLoader.loadObjModel( "lantern", loader ), new ModelTexture( loader.loadTexture( "lantern" ) ) );
+	        
+	        lantern.getTexture().setExtraInfoMap( loader.loadTexture( "lanternS" ) );
+	        
+	        cherryModel.getTexture().setHasTrasparency( true );
+	        cherryModel.getTexture().setShineDamper( 10 );
+	        cherryModel.getTexture().setReflectivity( 0.5f );
+	        cherryModel.getTexture().setExtraInfoMap( loader.loadTexture( "cherryS" ) );
 	        
 	        barrelModel.getTexture().setNormalMap( loader.loadTexture( "barrelNormal" ) );
 	        barrelModel.getTexture().setShineDamper( 10 );
 	        barrelModel.getTexture().setReflectivity( 0.5f );
+	        barrelModel.getTexture().setExtraInfoMap( loader.loadTexture( "barrelS" ) );
 	        
 	        stoneModel.getTexture().setNormalMap( loader.loadTexture( "boulderNormal" ) );
 	        stoneModel.getTexture().setShineDamper( 10 );
@@ -163,6 +173,7 @@ public class MainGameLoop {
 	        	
 	        	if( y > 1 )
 	        	{
+	        		entities.add(new Entity(cherryModel, new Vector3f( x + 20, y, z + 20 ),0,0,0,3));
 	        		entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
 		            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
 		            entities.add(new Entity(fern, new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
@@ -175,6 +186,11 @@ public class MainGameLoop {
 		            if( i % 59 == 0 )
 		            {
 		            	entities.add( new Entity( stallTexture, new Vector3f( x, y, z ), 0, 0, 0, 3 ) );
+		            }
+		            
+		            if( i % 25 == 0 )
+		            {
+		            	entities.add(new Entity(lantern, new Vector3f( x + 30, y, z + 30 ),0,0,0,3));
 		            }
 		            
 	        	}

@@ -31,6 +31,8 @@ public class NormalMappingShader extends ShaderProgram{
 	private int location_plane;
 	private int location_modelTexture;
 	private int location_normalMap;
+	private int location_specularMap;
+	private int location_usesSpecularMap;
 	
 	public NormalMappingShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -58,6 +60,9 @@ public class NormalMappingShader extends ShaderProgram{
 		location_plane 					= super.getUniformLocation("plane");
 		location_modelTexture 			= super.getUniformLocation("modelTexture");
 		location_normalMap 				= super.getUniformLocation("normalMap");
+		location_specularMap 			= super.getUniformLocation( "specularMap" );
+		location_usesSpecularMap 		= super.getUniformLocation( "usesSpecularMap" );
+		location_modelTexture 			= super.getUniformLocation( "modelTexture" );
 		
 		location_lightPositionEyeSpace 	= new int[MAX_LIGHTS];
 		location_lightColour 			= new int[MAX_LIGHTS];
@@ -71,17 +76,26 @@ public class NormalMappingShader extends ShaderProgram{
 		}
 	}
 	
-	protected void connectTextureUnits(){
-		super.loadInt(location_modelTexture, 0);
-		super.loadInt(location_normalMap, 1);
+	protected void connectTextureUnits()
+	{
+		super.loadInt( location_modelTexture, 0 );
+		super.loadInt( location_normalMap, 1 );
+		super.loadInt( location_specularMap, 2 );
 	}
 	
-	protected void loadClipPlane(Vector4f plane){
-		super.loadVector(location_plane, plane);
+	public void loadUseSpecularMap( boolean useMap )
+	{
+		super.loadBoolean( location_usesSpecularMap, useMap );
 	}
 	
-	protected void loadNumberOfRows(int numberOfRows){
-		super.loadFloat(location_numberOfRows, numberOfRows);
+	protected void loadClipPlane( Vector4f plane )
+	{
+		super.loadVector( location_plane, plane );
+	}
+	
+	protected void loadNumberOfRows( int numberOfRows )
+	{
+		super.loadFloat( location_numberOfRows, numberOfRows );
 	}
 	
 	protected void loadOffset(float x, float y){
