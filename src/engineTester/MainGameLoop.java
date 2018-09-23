@@ -1,6 +1,5 @@
 package engineTester;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,8 +26,8 @@ import normalMappingObjConverter.NormalMappedObjLoader;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import particles.ParticleMaster;
-import particles.ParticleSystem;
-import particles.ParticleTexture;
+import postProcessing.Fbo;
+import postProcessing.PostProcessing;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -247,6 +246,9 @@ public class MainGameLoop {
 	        
 	        //********************************************
 	        
+	        Fbo fbo = new Fbo( Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER );
+	        PostProcessing.init( loader );
+	        
 	        //*********** Game Loop Below **********
 	        
 	        while(!Display.isCloseRequested()){
@@ -280,8 +282,14 @@ public class MainGameLoop {
 	        	//Render to screen
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
 	        	buffers.unbindCurrentFrameBuffer();
+	        	
+	        	fbo.bindFrameBuffer();
+	        	
 	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, 100000000 ) );
 	        	waterRenderer.render( waters, camera, light );
+	        	
+	        	fbo.unbindFrameBuffer();
+	        	PostProcessing.doPostProcessing( fbo.getColourTexture() );
 	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 	        	
@@ -302,6 +310,8 @@ public class MainGameLoop {
 	        //********************************************
 	 
 	        //*********** Clean Up **********
+	        PostProcessing.cleanUp();
+	        fbo.cleanUp();
 	        ParticleMaster.cleanUp();
 	        TextMaster.cleanUp();
 	        buffers.cleanUp();
