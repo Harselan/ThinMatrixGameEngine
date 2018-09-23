@@ -68,3 +68,6 @@
 
 ### Anti Aliasing
 #### Anti Aliasing är en metod som används för att få objekten på spelet att verka mindre pixlade när man kollar nära på den med hjälp av att den tar fyra tester kommer tas per pixel istället för en så att de hårda kanterna på varje pixel blir mer utjämnade. 
+
+### Specular Maps
+#### Specular Maps är en bild som bestämmer vilka delar av en model som ska skina mer än andra delar som t.ex. att man vill att metalldelarna på en modell ska skina mer än trädelarna.
