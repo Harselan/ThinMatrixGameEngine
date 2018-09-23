@@ -246,7 +246,8 @@ public class MainGameLoop {
 	        
 	        //********************************************
 	        
-	        Fbo fbo = new Fbo( Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER );
+	        Fbo multisampleFbo 	= new Fbo( Display.getWidth(), Display.getHeight() );
+	        Fbo outputFbo 		= new Fbo( Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE );
 	        PostProcessing.init( loader );
 	        
 	        //*********** Game Loop Below **********
@@ -283,13 +284,15 @@ public class MainGameLoop {
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
 	        	buffers.unbindCurrentFrameBuffer();
 	        	
-	        	fbo.bindFrameBuffer();
+	        	multisampleFbo.bindFrameBuffer();
 	        	
 	        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, 100000000 ) );
 	        	waterRenderer.render( waters, camera, light );
 	        	
-	        	fbo.unbindFrameBuffer();
-	        	PostProcessing.doPostProcessing( fbo.getColourTexture() );
+	        	multisampleFbo.unbindFrameBuffer();
+	        	//multisampleFbo.resolveToScreen();
+	        	multisampleFbo.resolveToFbo( outputFbo );
+	        	PostProcessing.doPostProcessing( outputFbo.getColourTexture() );
 	        	
 	        	Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 	        	
@@ -311,7 +314,8 @@ public class MainGameLoop {
 	 
 	        //*********** Clean Up **********
 	        PostProcessing.cleanUp();
-	        fbo.cleanUp();
+	        outputFbo.cleanUp();
+	        multisampleFbo.cleanUp();
 	        ParticleMaster.cleanUp();
 	        TextMaster.cleanUp();
 	        buffers.cleanUp();
