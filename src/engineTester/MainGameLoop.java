@@ -150,13 +150,13 @@ public class MainGameLoop {
 	        terrains.add( terrain1 );
 	        terrains.add( terrain2 );
 	        
-	        int length 			= 800;
+	        int length 			= (int)Terrain.SIZE * terrains.size();
 	        Random random 		= new Random(676452);
 	        
-	        for( int i = 0; i < length; i++ )
+	        for( int i = 0; i < length * 2; i++ )
 	        {
-	        	float x = random.nextFloat() * length - 400;
-	        	float z = random.nextFloat() * -600;
+	        	float x = random.nextFloat() * length - Terrain.SIZE;
+	        	float z = random.nextFloat() * length - Terrain.SIZE;
 	        	float terrainHeight = 0;
 	        	
 	        	for( Terrain terrain : terrains )
@@ -173,11 +173,20 @@ public class MainGameLoop {
 	        	
 	        	if( y > 1 )
 	        	{
+	        		entities.add(new Entity(fern, new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
+	        		
 	        		entities.add(new Entity(cherryModel, new Vector3f( x + 20, y, z + 20 ),0,0,0,3));
-	        		entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
-		            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
-		            entities.add(new Entity(fern, new Vector3f( x, y, z ),0,random.nextFloat() * 360,0,0.9f));
+	        		
+	        		if( i % 4 == 0 )
+		            {
+			            entities.add(new Entity(grass, new Vector3f( x, y, z ),0,0,0,1));
+		            }
 		            
+	        		if( i % 5 == 0 )
+		            {
+	        			entities.add(new Entity(staticModel, new Vector3f( x, y, z ),0,0,0,3));
+		            }
+	        		
 		            if( i % 49 == 0 )
 		            {
 		            	normalMapEntities.add( new Entity( stoneModel, new Vector3f( x, y, z ), 0, 0, 0, 1f ) );
@@ -188,7 +197,7 @@ public class MainGameLoop {
 		            	entities.add( new Entity( stallTexture, new Vector3f( x, y, z ), 0, 0, 0, 3 ) );
 		            }
 		            
-		            if( i % 25 == 0 )
+		            if( i % 20 == 0 )
 		            {
 		            	entities.add(new Entity(lantern, new Vector3f( x + 30, y, z + 30 ),0,0,0,3));
 		            }
