@@ -5,7 +5,8 @@ in vec3 toLightVector[4];
 in vec3 toCameraVector;
 in float visibility;
 
-out vec4 out_Color;
+layout (location = 0) out vec4 out_Color;
+layout (location = 1) out vec4 out_BrightColor;
 
 uniform sampler2D modelTexture;
 uniform sampler2D specularMap;
@@ -48,8 +49,11 @@ void main(void){
 		discard;
 	}
 	
+	out_BrightColor = vec4( 0.0 );
+	
 	if( usesSpecularMap > 0.5 )
 	{
+		out_BrightColor = textureColour + vec4(totalSpecular,1.0);
 		vec4 mapInfo = texture( specularMap, pass_textureCoordinates );
 		totalSpecular *= mapInfo.r;
 	}
