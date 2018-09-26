@@ -71,3 +71,6 @@
 
 ### Specular Maps
 #### Specular Maps är en bild som bestämmer vilka delar av en model som ska skina mer än andra delar som t.ex. att man vill att metalldelarna på en modell ska skina mer än trädelarna.
+
+### Geometry Shader
+#### Geometry Shader Är ett steg att rita ut en pixel som Vertex shader och Fragment Shader. Geometry Shader ändrar dock per triangel istället för per pixel som Fragment Shadern gör. 
