@@ -244,16 +244,21 @@ public class MainGameLoop {
 	        Entity lampEntity = ( new Entity( lampModel, new Vector3f( 293, -6.8f, -305 ), 0, 0, 0, 1 ) );
 	        entities.add( lampEntity );
 	        
-	        WaterFrameBuffers buffers = new WaterFrameBuffers();
-	        WaterShader waterShader = new WaterShader();
-	        WaterRenderer waterRenderer = new WaterRenderer( loader, waterShader, renderer.getProjectionMatrix(), buffers );
-	        List<WaterTile> waters = new ArrayList<WaterTile>();
-	        
+			WaterShader waterShader = new WaterShader();
+			WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix()); 
+			List<WaterTile> waters = new ArrayList<WaterTile>();
+			//WaterTile water1 = new WaterTile(400, -400, -5);
+			//WaterTile water2 = new WaterTile(-200, -400, 5);
+			//waters.add(water1);
+			//waters.add(water2);
+			System.out.println( "TileSize:" + WaterTile.TILE_SIZE );
 	        for( int i = 0; i < 2; i++ )
 	        {
-	        	for( int j = 0; j < 2; j++ )
+	        	for( int j = 0; j < 1; j++ )
 	        	{
-	        		waters.add( new WaterTile( i * WaterTile.TILE_SIZE, -j * WaterTile.TILE_SIZE - 100, -5 ) );
+	        		System.out.println( "centerx:" + (-i * WaterTile.TILE_SIZE - WaterTile.TILE_SIZE) );
+	        		System.out.println( "centerz:" + (-j * WaterTile.TILE_SIZE - WaterTile.TILE_SIZE) );
+	        		waters.add( new WaterTile( i * WaterTile.TILE_SIZE + WaterTile.TILE_SIZE + 50, -j * WaterTile.TILE_SIZE - WaterTile.TILE_SIZE, -2 ) );
 	        	}
 	        }
 
@@ -293,22 +298,27 @@ public class MainGameLoop {
 	        	for( WaterTile water : waters )
 	        	{
 	        		//Render reflection texture
-		        	buffers.bindReflectionFrameBuffer();
-		        	float distance = 2 * ( camera.getPosition().y - water.getHeight() );
-		        	camera.getPosition().y -= distance;
-		        	camera.invertPitch();
-		        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, 1, 0, -water.getHeight() + 1 ) );
-		        	camera.getPosition().y += distance;
-		        	camera.invertPitch();
+	        		water.fbos.bindReflectionFrameBuffer();
+	    			float distance = 2 * (camera.getPosition().y - water.getHeight());
+	    			camera.getPosition().y -= distance;
+	    			camera.invertPitch(); // if you're using camera roll as well you'll need to invert Z
+	    			
+	    			renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, new Vector4f(0, 1, 0, -water.getHeight()+1));
+	    			// return the camera back to its original position after rendering the scene
+	    			camera.getPosition().y += distance;
+	    			camera.invertPitch();
 		        	
 		        	//Render refraction texture
-		        	buffers.bindRefractionFrameBuffer();
+	    			water.fbos.bindRefractionFrameBuffer();
 		        	renderer.renderScene( entities, normalMapEntities, terrains, lights, camera, new Vector4f( 0, -1, 0, water.getHeight() ) );
-	        	}	
+	        	}
 	        	
 	        	//Render to screen
 	        	GL11.glDisable( GL30.GL_CLIP_DISTANCE0 );
-	        	buffers.unbindCurrentFrameBuffer();
+	        	for( WaterTile water : waters )
+	        	{
+	        		water.fbos.unbindCurrentFrameBuffer();
+	        	}
 	        	
 	        	multisampleFbo.bindFrameBuffer();
 	        	
@@ -346,7 +356,12 @@ public class MainGameLoop {
 	        multisampleFbo.cleanUp();
 	        ParticleMaster.cleanUp();
 	        TextMaster.cleanUp();
-	        buffers.cleanUp();
+	        
+	        for( WaterTile water : waters )
+        	{
+	        	water.fbos.cleanUp();       	
+        	}
+	        
 	        waterShader.cleanUp();
 	        guiRenderer.cleanUp();
 	        renderer.cleanUp();
