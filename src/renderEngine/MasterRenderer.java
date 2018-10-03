@@ -16,6 +16,7 @@ import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
 import normalMappingRenderer.NormalMappingRenderer;
+import scene.Scene;
 import shaders.StaticShader;
 import shaders.TerrainShader;
 import shadows.ShadowMapMasterRenderer;
@@ -92,6 +93,11 @@ public class MasterRenderer
 		}
 		
 		render( lights, camera, clipPlane );
+	}
+	
+	public void renderScene( Scene scene )
+	{
+		renderScene( scene.getEntities(), scene.getNormalMapEntities(), scene.getTerrains(), scene.getLights(), scene.getCamera(), scene.getClipPlane() );
 	}
 	
 	public void render( List<Light> lights,Camera camera, Vector4f clipPlane )
