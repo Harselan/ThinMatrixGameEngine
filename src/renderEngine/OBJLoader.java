@@ -70,7 +70,6 @@ public class OBJLoader
 				String[] vertex1 = currentLine[1].split( "/" );
 				String[] vertex2 = currentLine[2].split( "/" );
 				String[] vertex3 = currentLine[3].split( "/" );
-				
 				processVertex( vertex1, indices, textures, normals, textureArray, normalsArray );
 				processVertex( vertex2, indices, textures, normals, textureArray, normalsArray );
 				processVertex( vertex3, indices, textures, normals, textureArray, normalsArray );
@@ -108,7 +107,6 @@ public class OBJLoader
 	{
 		int currentVertexPointer = Integer.parseInt( vertexData[0] ) - 1;
 		indices.add( currentVertexPointer );
-		
 		Vector2f currentTex = textures.get( Integer.parseInt( vertexData[1] ) - 1 );
 		textureArray[currentVertexPointer * 2]   = currentTex.x;
 		textureArray[currentVertexPointer * 2+1] = 1 - currentTex.y;

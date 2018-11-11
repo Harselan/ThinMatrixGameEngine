@@ -1,0 +1,76 @@
+# Wavefront .mtl file  -  created by SpaceDraw
+
+# File created: 18-11-04, 16:55
+
+newmtl brick2
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl marble24
+Ns 60.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.59999996 0.59999996 0.59999996 
+Ke 0.0 0.0 0.0 
+map_Ka marble2.jpg
+map_Kd marble2.jpg
+
+newmtl marble2
+Ns 60.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.59999996 0.59999996 0.59999996 
+Ke 0.0 0.0 0.0 
+map_Ka marble2.jpg
+map_Kd marble2.jpg
+
+newmtl marble21
+Ns 60.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.59999996 0.59999996 0.59999996 
+Ke 0.0 0.0 0.0 
+map_Ka marble2.jpg
+map_Kd marble2.jpg
+
+newmtl marble22
+Ns 60.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.59999996 0.59999996 0.59999996 
+Ke 0.0 0.0 0.0 
+map_Ka marble2.jpg
+map_Kd marble2.jpg
+
+newmtl marble25
+Ns 60.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.59999996 0.59999996 0.59999996 
+Ke 0.0 0.0 0.0 
+map_Ka marble2.jpg
+map_Kd marble2.jpg
+

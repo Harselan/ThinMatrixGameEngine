@@ -75,6 +75,7 @@ public class MainGameLoop {
         TexturedModel stoneModel 	= new TexturedModel( NormalMappedObjLoader.loadOBJ( "boulder", loader ), new ModelTexture( loader.loadTexture( "boulder" ) ) );
         TexturedModel cherryModel 	= new TexturedModel( OBJLoader.loadObjModel( "cherry", loader ), new ModelTexture( loader.loadTexture( "cherry" ) ) );
         TexturedModel lantern 		= new TexturedModel( OBJLoader.loadObjModel( "lantern", loader ), new ModelTexture( loader.loadTexture( "lantern" ) ) );
+        //TexturedModel tower 		= new TexturedModel( OBJLoader.loadObjModel( "tower", loader ), new ModelTexture( loader.loadTexture( "tower", "mtl" ) ) );
         
         lantern.getTexture().setExtraInfoMap( loader.loadTexture( "lanternS" ) );
         

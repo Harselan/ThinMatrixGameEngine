@@ -32,11 +32,6 @@ public class ParticleMaster
 			
 			List<Particle> list = entry.getValue();
 			
-			if( !entry.getKey().isAdditive() )
-			{
-				InsertionSort.sortHighToLow( list );	
-			}
-			
 			Iterator<Particle> iterator = list.iterator();
 			
 			while( iterator.hasNext() )
@@ -55,6 +50,11 @@ public class ParticleMaster
 				}
 				
 				
+			}
+			
+			if( !entry.getKey().isAdditive() )
+			{
+				InsertionSort.sortHighToLow( list );	
 			}
 		}
 	}

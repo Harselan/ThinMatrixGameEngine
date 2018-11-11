@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector4f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import guis.GuiTexture;
 import particles.ParticleSystem;
 import terrains.Terrain;
@@ -16,6 +17,7 @@ import water.WaterTile;
 
 public class Scene 
 {
+	private String name;
 	private List<Entity> entities 					= new ArrayList<Entity>();
 	private List<Entity> normalMapEntities 			= new ArrayList<Entity>();
 	private List<Light> lights 						= new ArrayList<Light>();
@@ -27,11 +29,24 @@ public class Scene
 	private Vector3f lightDirection;
 	private Vector4f clipPlane;
 	private Camera camera;
+	private Player player;
     
 	public Scene( Camera camera )
 	{
 		this.camera 	= camera;
 		this.clipPlane 	= new Vector4f( 0, -1, 0, 100000000 );
+	}
+	
+	public Scene( Camera camera, String name )
+	{
+		this( camera );
+		this.name = name;
+	}
+	
+	public Scene( Camera camera, String name, Player player )
+	{
+		this( camera, name );
+		this.player = player;
 	}
 	
     public Scene( Camera camera, Vector4f clipPlane )
@@ -129,5 +144,25 @@ public class Scene
 	public void setClipPlane( Vector4f clipPlane )
 	{
 		this.clipPlane = clipPlane;
+	}
+
+	public String getName() 
+	{
+		return name;
+	}
+
+	public void setName( String name ) 
+	{
+		this.name = name;
+	}
+
+	public Player getPlayer() 
+	{
+		return player;
+	}
+
+	public void setPlayer( Player player ) 
+	{
+		this.player = player;
 	}
 }

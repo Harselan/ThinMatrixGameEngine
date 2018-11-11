@@ -1,5 +1,9 @@
 package textures;
 
+import org.lwjgl.opengl.GL13;
+
+import utils.MyFile;
+
 public class ModelTexture 
 {
 	private int textureID;

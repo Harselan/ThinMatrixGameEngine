@@ -1,0 +1,13 @@
+type;name;x;y;z;scale;
+entity;boulder;10;20;30;1;
+entity;boulder;35;20;30;2;
+entity;boulder;55;20;30;2;
+entity;boulder;75;20;30;2;
+entity;boulder;95;20;30;2;
+entity;boulder;105;20;30;2;
+entity;boulder;115;20;30;2;
+particle;star;35;20;30;1;
+particle;star;305;50;300;4;
+particleAtlas;fire;35;20;30;1;
+guiTexture;logo;0.5;0.5;0;0.25;
+guiTexture;socuwan;0.25;0.25;0;0.25;

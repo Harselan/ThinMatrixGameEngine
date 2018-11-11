@@ -1,0 +1,3 @@
+barrel
+Terrain
+barrel;boulder;box;cherry;crate;fern;grass;lamp;lantern;pine;stall;tree;

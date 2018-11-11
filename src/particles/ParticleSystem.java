@@ -16,6 +16,7 @@ public class ParticleSystem
     private boolean randomRotation 		= false;
     private float directionDeviation 	= 0;
     private Random random 				= new Random();
+    private Vector3f position;
     private Vector3f direction;
  
     private ParticleTexture texture;
@@ -90,6 +91,25 @@ public class ParticleSystem
         }
     }
  
+    public void generateParticles() 
+    {
+    	Vector3f systemCenter 	= position;
+        float delta 			= DisplayManager.getFrameTimeSeconds();
+        float particlesToCreate = pps * delta;
+        int count 				= (int)Math.floor( particlesToCreate );
+        float partialParticle 	= particlesToCreate % 1;
+        
+        for( int i = 0; i < count; i++ ) 
+        {
+            emitParticle( systemCenter );
+        }
+        
+        if( Math.random() < partialParticle ) 
+        {
+            emitParticle( systemCenter );
+        }
+    }
+    
     private void emitParticle( Vector3f center ) 
     {
         Vector3f velocity = null;
@@ -109,7 +129,7 @@ public class ParticleSystem
         float scale 		= generateValue( averageScale, scaleError );
         float lifeLength 	= generateValue( averageLifeLength, lifeError );
         
-        new Particle( texture, new Vector3f(center), velocity, gravityComplient, lifeLength, generateRotation(), scale );
+        new Particle( texture, center, velocity, gravityComplient, lifeLength, generateRotation(), scale );
     }
  
     private float generateValue( float average, float errorMargin ) 
@@ -171,4 +191,14 @@ public class ParticleSystem
         
         return new Vector3f( x, y, z );
     }
+
+	public Vector3f getPosition() 
+	{
+		return position;
+	}
+
+	public void setPosition( Vector3f position ) 
+	{
+		this.position = position;
+	}
 }
