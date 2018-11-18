@@ -16,13 +16,12 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import models.RawModel;
 import renderEngine.Loader;
-import toolBox.Maths;
 
 public class ParticleRenderer {
 	
-	private static final float[] VERTICES 			= {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
-	private static final int MAX_INSTANCES 			= 10000;
-	private static final int INSTANCE_DATA_LENGTH 	= 21;
+	private static final float[] VERTICES = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
+	private static final int MAX_INSTANCES = 10000;
+	private static final int INSTANCE_DATA_LENGTH = 21;
 	
 	private static final FloatBuffer buffer = BufferUtils.createFloatBuffer( MAX_INSTANCES * INSTANCE_DATA_LENGTH );
 	
@@ -36,8 +35,8 @@ public class ParticleRenderer {
 	protected ParticleRenderer( Loader loader, Matrix4f projectionMatrix )
 	{
 		this.loader = loader;
-		this.vbo = loader.createEmptyVbo( INSTANCE_DATA_LENGTH * MAX_INSTANCES );
-		quad = loader.loadToVAO( VERTICES, 2 );
+		this.vbo 	= loader.createEmptyVbo( INSTANCE_DATA_LENGTH * MAX_INSTANCES );
+		quad 		= loader.loadToVAO( VERTICES, 2 );
 		
 		loader.addInstancedAttribute( quad.getVaoID(), vbo, 1, 4, INSTANCE_DATA_LENGTH, 0 );
 		loader.addInstancedAttribute( quad.getVaoID(), vbo, 2, 4, INSTANCE_DATA_LENGTH, 4 );
@@ -47,16 +46,15 @@ public class ParticleRenderer {
 		loader.addInstancedAttribute( quad.getVaoID(), vbo, 6, 1, INSTANCE_DATA_LENGTH, 20 );
 		
 		shader = new ParticleShader();
+		
 		shader.start();
-		
 		shader.loadProjectionMatrix( projectionMatrix );
-		
 		shader.stop();
 	}
 	
 	protected void render( Map<ParticleTexture, List<Particle>> particles, Camera camera )
 	{
-		Matrix4f viewMatrix = Maths.createViewMatrix( camera );
+		Matrix4f viewMatrix = toolBox.Maths.createViewMatrix( camera );
 		prepare();
 		
 		for( ParticleTexture texture : particles.keySet() )
@@ -64,7 +62,7 @@ public class ParticleRenderer {
 			bindTexture( texture );
 			List<Particle> particleList = particles.get( texture );
 			pointer = 0;
-			float[] vboData = new float[ particleList.size() * INSTANCE_DATA_LENGTH ];
+			float[] vboData = new float[particleList.size() * INSTANCE_DATA_LENGTH];
 			
 			for( Particle particle : particleList )
 			{
@@ -79,18 +77,17 @@ public class ParticleRenderer {
 		finishRendering();
 	}
 
-	protected void cleanUp()
-	{
+	protected void cleanUp(){
 		shader.cleanUp();
 	}
 	
 	private void updateTexCoordInfo( Particle particle, float[] data )
 	{
-		data[ pointer++ ] = particle.getTexOffset1().x;
-		data[ pointer++ ] = particle.getTexOffset1().y;
-		data[ pointer++ ] = particle.getTexOffset2().x;
-		data[ pointer++ ] = particle.getTexOffset2().y;
-		data[ pointer++ ] = particle.getBlend();
+		data[pointer++] = particle.getTexOffset1().x;
+		data[pointer++] = particle.getTexOffset1().y;
+		data[pointer++] = particle.getTexOffset2().x;
+		data[pointer++] = particle.getTexOffset2().y;
+		data[pointer++] = particle.getBlend();
 	}
 	
 	private void bindTexture( ParticleTexture texture )
@@ -105,8 +102,7 @@ public class ParticleRenderer {
 		}
 		
 		GL13.glActiveTexture( GL13.GL_TEXTURE0 );
-		GL11.glBindTexture(  GL11.GL_TEXTURE_2D , texture.getTextureID() );
-		
+		GL11.glBindTexture( GL11.GL_TEXTURE_2D, texture.getTextureID() );
 		shader.loadNumberOfRows( texture.getNumberOfRows() );
 	}
 	
@@ -114,7 +110,7 @@ public class ParticleRenderer {
 	{
 		Matrix4f modelMatrix = new Matrix4f();
 		Matrix4f.translate( position, modelMatrix, modelMatrix );
-		
+	
 		modelMatrix.m00 = viewMatrix.m00;
 		modelMatrix.m01 = viewMatrix.m10;
 		modelMatrix.m02 = viewMatrix.m20;
@@ -125,31 +121,31 @@ public class ParticleRenderer {
 		modelMatrix.m21 = viewMatrix.m12;
 		modelMatrix.m22 = viewMatrix.m22;
 		
-		Matrix4f.rotate( (float)Math.toRadians( rotation ), new Vector3f( 0, 0, 1 ), modelMatrix, modelMatrix );
-		Matrix4f.scale( new Vector3f( scale, scale, scale ), modelMatrix, modelMatrix );
 		Matrix4f modelViewMatrix = Matrix4f.mul( viewMatrix, modelMatrix, null );
+		Matrix4f.rotate( ( float )Math.toRadians( rotation ), new Vector3f( 0, 0, 1 ), modelMatrix, modelMatrix );
+		Matrix4f.scale( new Vector3f( scale, scale, scale ), modelMatrix, modelMatrix );
 		
 		storeMatrixData( modelViewMatrix, vboData );
 	}
 	
 	private void storeMatrixData( Matrix4f matrix, float[] vboData )
 	{
-	    vboData[pointer++] = matrix.m00;
-	    vboData[pointer++] = matrix.m01;
-	    vboData[pointer++] = matrix.m02;
-	    vboData[pointer++] = matrix.m03;
-	    vboData[pointer++] = matrix.m10;
-	    vboData[pointer++] = matrix.m11;
-	    vboData[pointer++] = matrix.m12;
-	    vboData[pointer++] = matrix.m13;
-	    vboData[pointer++] = matrix.m20;
-	    vboData[pointer++] = matrix.m21;
-	    vboData[pointer++] = matrix.m22;
-	    vboData[pointer++] = matrix.m23;
-	    vboData[pointer++] = matrix.m30;
-	    vboData[pointer++] = matrix.m31;
-	    vboData[pointer++] = matrix.m32;
-	    vboData[pointer++] = matrix.m33;
+		 vboData[pointer++] = matrix.m00;
+		  vboData[pointer++] = matrix.m01;
+		  vboData[pointer++] = matrix.m02;
+		  vboData[pointer++] = matrix.m03;
+		  vboData[pointer++] = matrix.m10;
+		  vboData[pointer++] = matrix.m11;
+		  vboData[pointer++] = matrix.m12;
+		  vboData[pointer++] = matrix.m13;
+		  vboData[pointer++] = matrix.m20;
+		  vboData[pointer++] = matrix.m21;
+		  vboData[pointer++] = matrix.m22;
+		  vboData[pointer++] = matrix.m23;
+		  vboData[pointer++] = matrix.m30;
+		  vboData[pointer++] = matrix.m31;
+		  vboData[pointer++] = matrix.m32;
+		  vboData[pointer++] = matrix.m33;
 	}
 	
 	private void prepare()
@@ -183,7 +179,6 @@ public class ParticleRenderer {
 		GL20.glDisableVertexAttribArray( 6 );
 		
 		GL30.glBindVertexArray( 0 );
-		
 		shader.stop();
 	}
 

@@ -69,14 +69,13 @@ public class EntityList
 	private static ParticleSystem createParticleSystem( String path, Vector3f pos, float scale )
 	{	
 		ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( path + "material" ), 1, false ); 
-        ParticleSystem system 			= new ParticleSystem( particleTexture, 40, 1, 0.5f, 100, 1.6f );
+        ParticleSystem system 			= new ParticleSystem( particleTexture, 50, 25, 0.3f, 4, 1, pos );
         
         system.randomizeRotation();
         system.setDirection( new Vector3f( 0, 1, 0 ), 0.1f );
         system.setLifeError( 1f );
         system.setSpeedError( 1f );
         system.setScaleError( 1f );
-		system.setPosition( pos );
         
 		return system;
 	}
@@ -84,14 +83,13 @@ public class EntityList
 	private static ParticleSystem createParticleAtlasSystem( String path, Vector3f pos, float scale )
 	{	
 		ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( path + "material" ), 4, false ); 
-        ParticleSystem system 			= new ParticleSystem( particleTexture, 40, 10, 0.1f, 1, 1.6f );
+        ParticleSystem system 			= new ParticleSystem( particleTexture, 50, 10, 0.1f, 1, 1.6f, pos );
         
         system.randomizeRotation();
         system.setDirection( new Vector3f( 0.31f, 0.31f, 0 ), 0.1f );
         system.setLifeError( 0.1f );
         system.setSpeedError( 0.25f );
         system.setScaleError( 0.5f );
-		system.setPosition( pos );
         
 		return system;
 	}

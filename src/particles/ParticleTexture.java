@@ -1,6 +1,6 @@
 package particles;
 
-public class ParticleTexture
+public class ParticleTexture 
 {
 	private int textureID;
 	private int numberOfRows;
@@ -12,18 +12,19 @@ public class ParticleTexture
 		this.numberOfRows = numberOfRows;
 		this.additive = additive;
 	}
+
+	protected boolean isAdditive()
+	{
+		return additive;
+	}
 	
 	public int getTextureID() 
 	{
 		return textureID;
 	}
+
 	public int getNumberOfRows() 
 	{
 		return numberOfRows;
-	}
-	
-	public boolean isAdditive()
-	{
-		return additive;
 	}
 }

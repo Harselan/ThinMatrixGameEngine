@@ -252,6 +252,8 @@ public class MainGameLoop {
 
         //*********** Particle System Example **********
         
+        ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleStar" ), 1 );
+        
         ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleAtlas" ), 4, false ); 
         
         ParticleSystem system = new ParticleSystem( particleTexture, 40, 10, 0.1f, 1, 1.6f );

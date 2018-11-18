@@ -14,7 +14,7 @@ import renderEngine.Loader;
 
 public class ParticleMaster 
 {
-	private static Map<ParticleTexture,List<Particle>> particles = new HashMap<ParticleTexture, List<Particle>>();
+	private static Map<ParticleTexture, List<Particle>> particles = new HashMap< ParticleTexture, List<Particle>>();
 	private static ParticleRenderer renderer;
 	
 	public static void init( Loader loader, Matrix4f projectionMatrix )
@@ -30,8 +30,7 @@ public class ParticleMaster
 		{
 			Entry<ParticleTexture, List<Particle>> entry = mapIterator.next();
 			
-			List<Particle> list = entry.getValue();
-			
+			List<Particle> list 		= entry.getValue();
 			Iterator<Particle> iterator = list.iterator();
 			
 			while( iterator.hasNext() )
@@ -48,13 +47,11 @@ public class ParticleMaster
 						mapIterator.remove();
 					}
 				}
-				
-				
 			}
 			
 			if( !entry.getKey().isAdditive() )
 			{
-				InsertionSort.sortHighToLow( list );	
+				InsertionSort.sortHighToLow( list );
 			}
 		}
 	}
@@ -76,7 +73,7 @@ public class ParticleMaster
 		if( list == null )
 		{
 			list = new ArrayList<Particle>();
-			particles.put(particle.getTexture(), list );
+			particles.put( particle.getTexture(), list );
 		}
 		
 		list.add( particle );

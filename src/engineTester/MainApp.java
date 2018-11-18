@@ -1,5 +1,6 @@
 package engineTester;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -7,10 +8,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Light;
-import fontRendering.TextMaster;
 import guis.GuiRenderer;
 import loaders.LoaderSettings;
 import loaders.SceneLoader;
+import particles.Particle;
 import particles.ParticleMaster;
 import particles.ParticleSystem;
 import particles.ParticleTexture;
@@ -37,25 +38,10 @@ public class MainApp
 		MasterRenderer renderer = new MasterRenderer( loader, scene.getCamera() );
         //MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), scene.getTerrains() );
 		
+		ParticleMaster.init( loader, renderer.getProjectionMatrix() );
+		
 		Light light = new Light( new Vector3f( 293, 7, -305 ), new Vector3f( 0, 2, 2 ), new Vector3f( 1, 0.01f, 0.002f ) );
         scene.addLight( light );
-        
-        //*********** Particle System Example **********
-        ParticleMaster.init( loader, renderer.getProjectionMatrix() );
-        /*ParticleMaster.init( loader, renderer.getProjectionMatrix() );
-        
-        ParticleTexture particleTexture = new ParticleTexture( loader.loadTexture( "particleAtlas" ), 4, false ); 
-        
-        ParticleSystem system = new ParticleSystem( particleTexture, 40, 10, 0.1f, 1, 1.6f );
-        
-        system.randomizeRotation();
-        system.setDirection( new Vector3f( 0, 1, 0 ), 0.1f );
-        system.setLifeError( 0.1f );
-        system.setSpeedError( 0.25f );
-        system.setScaleError( 0.5f );
-        system.setPosition( new Vector3f( 100, 10, 100 ) );
-        
-        scene.addParticleSystem( system );*/
         
         //********************************************
         
@@ -86,12 +72,13 @@ public class MainApp
         	
         	for( ParticleSystem pSystem : scene.getParticleSystems() )
         	{
-        		pSystem.generateParticles( new Vector3f( 100, 50, 50 ) );
+        		pSystem.generateParticles();
+        		//pSystem.generateParticles( scene.getPlayer().getPosition() );
         	}
         	
-        	ParticleMaster.update( camera );
+        	ParticleMaster.update( scene.getCamera() );
         	
-        	Light sun = new Light( new Vector3f( 10000000, 15000000, -10000000 ), new Vector3f( 1.3f, 1.3f, 1.3f ) );
+        	Light sun = new Light( new Vector3f( 100000000, 150000000, -100000000 ), new Vector3f( 1.3f, 1.3f, 1.3f ) );
             scene.addLight( sun );
         	
         	/*system.generateParticles( new Vector3f( 100, 50, 50 ) );*/
@@ -128,6 +115,8 @@ public class MainApp
         	
         	renderer.renderScene( scene );
         	waterRenderer.render( scene.getWaters(), camera, light );
+
+        	ParticleMaster.renderParticles( scene.getCamera() );
         	
         	multisampleFbo.unbindFrameBuffer();
         	multisampleFbo.resolveToFbo( GL30.GL_COLOR_ATTACHMENT0, outputFbo );
@@ -141,8 +130,6 @@ public class MainApp
         		lampEntity.setPosition( terrainPoint );
         		light.setPosition( new Vector3f( terrainPoint.x, terrainPoint.y + 15, terrainPoint.z ) );
         	}*/
-
-        	ParticleMaster.renderParticles( camera );
         	
             guiRenderer.render( scene.getGuis() );
             //TextMaster.render();
