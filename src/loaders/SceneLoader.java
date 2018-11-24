@@ -2,24 +2,22 @@ package loaders;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
-import entities.Entity;
 import entities.Player;
 import models.TexturedModel;
 import renderEngine.Loader;
 import renderEngine.OBJLoader;
 import scene.Scene;
+import scene.Settings;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import utils.MyFile;
+import water.WaterTile;
 
 public class SceneLoader 
 {
@@ -56,27 +54,19 @@ public class SceneLoader
     {
     	this( new Loader() );
     }
-    
-	public Scene loadScene( MyFile sceneFile ) 
-	{
-		MyFile sceneList = new MyFile( sceneFile, LoaderSettings.ENTITY_LIST_FILE );
-		BufferedReader reader = getReader( sceneList );
-		
-		MyFile player 			= readEntityFiles( reader, sceneFile )[0];
-		MyFile[] terrainFiles 	= readEntityFiles( reader, sceneFile );
-		MyFile[] entityFiles 	= readEntityFiles( reader, sceneFile );
-		
-		closeReader( reader );
-		
-		return createScene( terrainFiles, entityFiles, sceneFile );
-	}
 	
-	private Scene createScene( MyFile[] terrainFiles, MyFile[] entityFiles, MyFile sceneFile )
+	public Scene createScene( MyFile sceneFile )
 	{
 		String sceneName = sceneFile.getName();
 		
-		TexturedModel playerTexture = new TexturedModel( OBJLoader.loadObjModel( sceneName + "/player/model", loader ), new ModelTexture( loader.loadTexture( "playerTexture" ) ) );
-		Player player = new Player( playerTexture, new Vector3f( 100, 0, -50 ), 0, 180, 0, 0.6f );
+		String path = sceneName + "/" + Settings.playerFolder + "/";
+
+		TexturedModel playerTexture = new TexturedModel( 
+			OBJLoader.loadObjModel( path + "model", loader ), 
+			new ModelTexture( loader.loadTexture( path + "material" ) ) 
+		);
+		
+		Player player = new Player( playerTexture, Settings.startPosition, 0, 180, 0, 0.6f );
         Camera camera = new Camera( player );
 		
 		Scene scene = new Scene(camera, sceneName);
@@ -85,44 +75,20 @@ public class SceneLoader
 		
 		scene = EntityList.load( sceneFile, loader, scene );
 		
-		//addEntities(scene, entityFiles);
-		addTerrains(scene, terrainFiles);
+		addWater( scene );
 		
 		return scene;
 	}
 	
-	private void addEntities( Scene scene, MyFile[] entityFiles )
+	private void addWater( Scene scene )
 	{
-		Random rand = new Random();
-		
-		for( MyFile file : entityFiles )
-		{
-			String filePath = scene.getName() + "/" + file.getName() + "/";
-			TexturedModel model = new TexturedModel( OBJLoader.loadObjModel( filePath + "model", loader ), new ModelTexture( loader.loadTexture( filePath + "material" ) ) );
-			Entity entity = new Entity( model, new Vector3f( x, y, z ),0,0,0,1 );
-			
-			x += rand.nextInt( 15 );
-			z += rand.nextInt( 15 );
-			
-			scene.addEntity( entity );
-		}
-	}
-	
-	private void setEntityConfigs( Entity entity, Configs configs )
-	{
-		//entity.setCastsShadow( configs.castsShadow() );
-		//entity.setHasReflection( configs.hasReflection() );
-		//entity.setSeenUnderWater( configs.hasRefraction() );
-		//entity.setImportant( configs.isImportant() );
-	}
-	
-	private void addTerrains( Scene scene, MyFile[] terrainFiles )
-	{
-		for( MyFile file : terrainFiles )
-		{
-			Terrain terrain = new Terrain( 0,-1,loader, texturePack, blendMap, "heightmap" );
-			scene.addTerrain(terrain);
-		}
+		for( int i = 0; i < 1; i++ )
+        {
+        	for( int j = 0; j < 1; j++ )
+        	{
+        		scene.addWater( new WaterTile( i * WaterTile.TILE_SIZE + WaterTile.TILE_SIZE + 50, -j * WaterTile.TILE_SIZE - WaterTile.TILE_SIZE, Settings.waterHeight ) );
+        	}
+        }
 	}
 	
 	private BufferedReader getReader( MyFile file ) 

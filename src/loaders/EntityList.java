@@ -14,7 +14,10 @@ import particles.ParticleTexture;
 import renderEngine.Loader;
 import renderEngine.OBJLoader;
 import scene.Scene;
+import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 import utils.MyFile;
 
 public class EntityList 
@@ -26,7 +29,6 @@ public class EntityList
 	private static Scene loadRow( String line, String sceneName, Scene scene )
 	{
 		String[] names = line.split(LoaderSettings.SEPARATOR);
-		MyFile[] files = new MyFile[names.length];
 		
 		String objectType 	= names[0];
 		String objectName 	= names[1];
@@ -37,7 +39,12 @@ public class EntityList
 		switch( objectType )
 		{
 			case "entity":
+				filePath = sceneName + "/entities/" + objectName + "/";
 				scene.addEntity( createEntity( filePath, pos, scale ) );
+			break;
+			
+			case "terrain":
+				scene.addTerrain( createTerrain( filePath, pos ) );
 			break;
 			
 			case "particle":
@@ -64,6 +71,19 @@ public class EntityList
 			);
 		
 		return new Entity( model, pos, 0, 0, 0, scale );
+	}
+	
+	private static Terrain createTerrain( String path, Vector3f grid )
+	{
+		TerrainTexture backgroundTexture 	= new TerrainTexture( loader.loadTexture( path + "background" ) );
+		TerrainTexture rTexture 			= new TerrainTexture( loader.loadTexture( path + "r" ) );
+		TerrainTexture gTexture 			= new TerrainTexture( loader.loadTexture( path + "g" ) );
+		TerrainTexture bTexture 			= new TerrainTexture( loader.loadTexture( path + "b" ) );
+		TerrainTexture blendMap 			= new TerrainTexture( loader.loadTexture( path + "blendMap" ) );
+
+		TerrainTexturePack texturePack 		= new TerrainTexturePack( backgroundTexture, rTexture, gTexture, bTexture );
+		
+		return new Terrain( (int)grid.x, (int)grid.y, loader, texturePack, blendMap, "heightmap" );
 	}
 	
 	private static ParticleSystem createParticleSystem( String path, Vector3f pos, float scale )

@@ -11,3 +11,5 @@ particle;star;100;30;-200;4;
 particleAtlas;fire;180;20;-250;1;
 guiTexture;logo;0.5;0.5;0;0.25;
 guiTexture;socuwan;0.25;0.25;0;0.25;
+terrain;terrain;-1;-1;0;1;
+terrain;terrain;0;-1;0;1;

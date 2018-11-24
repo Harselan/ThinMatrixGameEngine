@@ -1,6 +1,5 @@
 package renderEngine;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +24,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import loaders.LoaderSettings;
 import models.RawModel;
+import scene.Scene;
 import textures.TextureData;
 
 public class Loader 
@@ -222,7 +223,7 @@ public class Loader
 			GL11.glDeleteTextures( texture );
 	}
 	
-	public int loadCubeMap( String[] textureFiles )
+	public int loadCubeMap( String[] textureFiles, String type, Scene scene )
 	{
 		int texID = GL11.glGenTextures();
 		GL13.glActiveTexture( GL13.GL_TEXTURE0 );
@@ -241,7 +242,9 @@ public class Loader
 		 */
 		for( int i = 0; i < textureFiles.length; i++ )
 		{
-			TextureData data = decodeTextureFile( textureFiles[i] );
+			String filePath 	= scene.getName() + "/" + getTypeFolder( type ) + "/" + textureFiles[i];
+			TextureData data 	= decodeTextureFile( filePath );
+			
 			GL11.glTexImage2D( GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer() );
 		}
 		
@@ -253,15 +256,35 @@ public class Loader
 		return texID;
 	}
 	
+	private String getTypeFolder( String type )
+	{
+		String folder = "";
+		
+		switch( type )
+		{
+			case "day":
+				folder = LoaderSettings.SKYBOX_DAY_FOLDER;
+			break;
+			
+			case "night":
+				folder = LoaderSettings.SKYBOX_NIGHT_FOLDER;
+			break;
+		}
+		
+		return folder;
+	}
+	
 	private TextureData decodeTextureFile( String fileName )
 	{
 		int width 			= 0;
 		int height 			= 0;
 		ByteBuffer buffer 	= null;
 		
+		String path = "/res/";
+		
 		try
 		{
-			InputStream in = Class.class.getResourceAsStream( "/res/" + fileName + ".png" );
+			InputStream in = Class.class.getResourceAsStream( path + fileName + ".png" );
 			PNGDecoder decoder = new PNGDecoder( in );
 			width = decoder.getWidth();
 			height = decoder.getHeight();

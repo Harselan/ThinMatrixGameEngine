@@ -7,10 +7,11 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Camera;
+import loaders.LoaderSettings;
 import models.RawModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
-import renderEngine.MasterRenderer;
+import scene.Scene;
 
 public class SkyboxRenderer 
 {
@@ -61,7 +62,6 @@ public class SkyboxRenderer
 	     SIZE, -SIZE,  SIZE
 	};
 	
-	private static String[] TEXTURE_FILES = { "right", "left", "top", "bottom", "back", "front" };
 	private static String[] NIGHT_TEXTURE_FILES = { "nightRight", "nightLeft", "nightTop", "nightBottom", "nightBack", "nightFront" };
 	
 	private RawModel cube;
@@ -70,11 +70,11 @@ public class SkyboxRenderer
 	private SkyboxShader shader;
 	private float time = 0;
 	
-	public SkyboxRenderer( Loader loader, Matrix4f projectionMatrix )
+	public SkyboxRenderer( Loader loader, Matrix4f projectionMatrix, Scene scene )
 	{
 		cube = loader.loadToVAO( VERTICES, 3 );
-		texture = loader.loadCubeMap( TEXTURE_FILES );
-		nightTexture = loader.loadCubeMap( NIGHT_TEXTURE_FILES );
+		texture = loader.loadCubeMap( LoaderSettings.SKYBOX_TEX_FILES, "day", scene );
+		nightTexture = loader.loadCubeMap( LoaderSettings.SKYBOX_TEX_FILES, "night", scene );
 		shader = new SkyboxShader();
 		shader.start();
 		shader.connectTextureUnits();

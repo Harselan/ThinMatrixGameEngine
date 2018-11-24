@@ -33,9 +33,9 @@ public class MainApp
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		SceneLoader sceneLoader = new SceneLoader( loader );
-		Scene scene = sceneLoader.loadScene(new MyFile(LoaderSettings.RES_FOLDER, "scene"));
+		Scene scene = sceneLoader.createScene(new MyFile(LoaderSettings.RES_FOLDER, "scene"));
 		
-		MasterRenderer renderer = new MasterRenderer( loader, scene.getCamera() );
+		MasterRenderer renderer = new MasterRenderer( loader, scene );
         //MousePicker picker = new MousePicker( camera, renderer.getProjectionMatrix(), scene.getTerrains() );
 		
 		ParticleMaster.init( loader, renderer.getProjectionMatrix() );
@@ -45,17 +45,10 @@ public class MainApp
         
         //********************************************
         
-        WaterShader waterShader = new WaterShader();
+        WaterShader waterShader 	= new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix()); 
-		GuiRenderer guiRenderer = new GuiRenderer( loader );
 		
-        for( int i = 0; i < 2; i++ )
-        {
-        	for( int j = 0; j < 1; j++ )
-        	{
-        		scene.addWater( new WaterTile( i * WaterTile.TILE_SIZE + WaterTile.TILE_SIZE + 50, -j * WaterTile.TILE_SIZE - WaterTile.TILE_SIZE, -2 ) );
-        	}
-        }
+		GuiRenderer guiRenderer 	= new GuiRenderer( loader );
         
         Fbo multisampleFbo 	= new Fbo( Display.getWidth(), Display.getHeight() );
         Fbo outputFbo 		= new Fbo( Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE );
@@ -80,8 +73,6 @@ public class MainApp
         	
         	Light sun = new Light( new Vector3f( 100000000, 150000000, -100000000 ), new Vector3f( 1.3f, 1.3f, 1.3f ) );
             scene.addLight( sun );
-        	
-        	/*system.generateParticles( new Vector3f( 100, 50, 50 ) );*/
         	
         	renderer.renderShadowMap( scene.getEntities(), sun );
         	

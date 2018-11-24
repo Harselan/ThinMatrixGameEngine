@@ -53,15 +53,16 @@ public class MasterRenderer
 	private SkyboxRenderer skyboxRenderer;
 	private ShadowMapMasterRenderer shadowMapRenderer;
 	 
-	public MasterRenderer( Loader loader, Camera cam )
+	public MasterRenderer( Loader loader, Scene scene )
 	{
 		enableCulling();
 	    createProjectionMatrix();
-	    renderer = new EntityRenderer( shader, projectionMatrix );
-	    terrainRenderer = new TerrainRenderer( terrainShader, projectionMatrix );
-	    skyboxRenderer = new SkyboxRenderer( loader, projectionMatrix );
-	    normalMapRenderer = new NormalMappingRenderer( projectionMatrix );
-	    this.shadowMapRenderer = new ShadowMapMasterRenderer( cam );
+	    
+	    renderer 				= new EntityRenderer( shader, projectionMatrix );
+	    terrainRenderer 		= new TerrainRenderer( terrainShader, projectionMatrix );
+	    skyboxRenderer 			= new SkyboxRenderer( loader, projectionMatrix, scene );
+	    normalMapRenderer 		= new NormalMappingRenderer( projectionMatrix );
+	    this.shadowMapRenderer 	= new ShadowMapMasterRenderer( scene.getCamera() );
 	}
 	
 	public static void enableCulling()
